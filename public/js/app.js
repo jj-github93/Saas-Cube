@@ -21271,9 +21271,12 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
   \*********************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module build failed (from ./node_modules/mini-css-extract-plugin/dist/loader.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/dist/cjs.js):\nSassError: Can't find stylesheet to import.\n  ╷\n1 │ @import '~fortawesome/fontawesome-free/scss/fontawesome';\n  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  ╵\n  resources\\sass\\app.scss 1:9  root stylesheet\n    at processResult (c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\webpack\\lib\\NormalModule.js:721:19)\n    at c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\webpack\\lib\\NormalModule.js:827:5\n    at c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\loader-runner\\lib\\LoaderRunner.js:399:11\n    at c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\loader-runner\\lib\\LoaderRunner.js:251:18\n    at context.callback (c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\loader-runner\\lib\\LoaderRunner.js:124:13)\n    at c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\sass-loader\\dist\\index.js:54:7\n    at Function.call$2 (c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\sass\\sass.dart.js:93852:16)\n    at _render_closure1.call$2 (c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\sass\\sass.dart.js:82163:12)\n    at _RootZone.runBinary$3$3 (c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\sass\\sass.dart.js:27566:18)\n    at _FutureListener.handleError$1 (c:\\Users\\jjaya\\Programming\\DipoSemOne\\SaasPHP\\CUBE\\node_modules\\sass\\sass.dart.js:26096:21)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }),
 
