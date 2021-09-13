@@ -14,6 +14,8 @@
                         <dd class="col-span-5">{{$user->id}}</dd>
                         <dt class="col-span-1">Name</dt>
                         <dd class="col-span-5">{{$user->name}}</dd>
+                        <dt class="col-span-1">Email</dt>
+                        <dd class="col-span-5">{{$user->email}}</dd>
                         <dt class="col-span-1">Added</dt>
                         <dd class="col-span-5">{{$user->created_at}}</dd>
                         <dt class="col-span-1">Last Logged In</dt>

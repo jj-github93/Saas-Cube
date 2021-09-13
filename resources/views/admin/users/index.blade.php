@@ -17,7 +17,16 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Last Logged In</th>
-                                <th>Actions</th>
+                                <th class="flex justify-between">
+                                    <span class="pt-2">Action
+
+                                    </span>
+                                    <a
+                                        href="{{route('users.create')}}"
+                                        class="btn btn-sm btn-tertiary tet-gray-50">
+                                        Add User
+                                    </a>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -29,6 +38,7 @@
                                     <td> - </td>
                                     <td>
                                         <a href="{{url('/admin/users/' . $user->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                        <a href="{{url('/admin/users/' . $user->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>
                                     </td>
                                 </tr>
                             @endforeach
