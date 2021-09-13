@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::resource('/admin/users', App\Http\Controllers\Admin\UserController::class);
+
 Route::get('/', function () {
     return view('welcome');
 });
