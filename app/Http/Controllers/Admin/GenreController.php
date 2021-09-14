@@ -69,9 +69,11 @@ class GenreController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Genre $genre)
     {
-        //
+        // Gets all genres for select drop down
+        $all_genres = Genre::all();
+        return view('admin.genres.update', compact(['genre', 'all_genres']));
     }
 
     /**
@@ -81,9 +83,15 @@ class GenreController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Genre $genre)
     {
-        //
+        $patches = [
+            'name' => !is_null($request->input('name')) ? $request->input('name') : $genre->name,
+            'icon' => !is_null($request->input('icon')) ? $request->input('icon') : $genre->icon,
+            'parent_id' => ($request->input('parent_id') == 0) ? null : $request->input('parent_id'),
+        ];
+        $genre->update($patches);
+        return redirect(route('genres.index'));
     }
 
     /**
@@ -94,10 +102,10 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
+        $genre->delete();
+        return redirect(route('genres.index'));
+        //redirect(route('genres.delete'), compact(['genre']));
 
     }
-    public function delete(Genre $genre)
-    {
-        return view('admin/genres/delete', compact(['genre']));
-    }
+
 }

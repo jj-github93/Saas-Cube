@@ -22,7 +22,7 @@
                         <dt class="col-span-1">Actions</dt>
                         <dd class="col-span-5">
                             <form
-                                action="{{route('users.delete',['user'=>$user])}}"
+                                action="{{route('users.destroy',['user'=>$user])}}"
                                 method="post">
                                 @csrf
                                 @method('delete')

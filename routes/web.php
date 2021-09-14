@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/admin/users', App\Http\Controllers\Admin\UserController::class);
-Route::resource('/admin/genres', App\Http\Controllers\Admin\GenreController::class);
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,6 +24,7 @@ Route::prefix('admin')->group(function(){
         'users',
         App\Http\Controllers\Admin\UserController::class
     );
+    Route::resource('genres', App\Http\Controllers\Admin\GenreController::class);
 });
 
 Route::get('/dashboard', function () {

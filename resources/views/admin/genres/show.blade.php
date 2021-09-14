@@ -20,7 +20,6 @@
                         <dd class="col-span-5">{{$genre->created_at}}</dd>
                         <dt class="col-span-1">Actions</dt>
                         <dd class="col-span-5">
-
                             <form
                                 action="{{route('genres.destroy',['genre'=>$genre])}}"
                                 method="post">
