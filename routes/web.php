@@ -14,13 +14,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::resource('/admin/users', App\Http\Controllers\Admin\UserController::class);
+Route::resource('/admin/genres', App\Http\Controllers\Admin\GenreController::class);
 
 Route::get('/', function () {
     return view('welcome');
+})->name('welcome');
+
+Route::prefix('admin')->group(function(){
+    Route::resource(
+        'users',
+        App\Http\Controllers\Admin\UserController::class
+    );
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+
 
 require __DIR__.'/auth.php';

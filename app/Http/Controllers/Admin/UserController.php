@@ -86,8 +86,9 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $patches = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
+            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $user->name,
+            'email' => !is_null($request->input('password'))
+                ? $request->input('email') : $user->email,
             'password' => !is_null($request->input('password')) ?
                 Hash::make($request->input('password')) : $user->password,
         ];
@@ -106,4 +107,6 @@ class UserController extends Controller
         $user->delete();
         return redirect(route('users.index'));
     }
+
+
 }
