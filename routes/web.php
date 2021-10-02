@@ -20,11 +20,9 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::prefix('admin')->group(function(){
-    Route::resource(
-        'users',
-        App\Http\Controllers\Admin\UserController::class
-    );
+    Route::resource('users',App\Http\Controllers\Admin\UserController::class);
     Route::resource('genres', App\Http\Controllers\Admin\GenreController::class);
+    Route::resource('tracks', App\Http\Controllers\Admin\TrackController::class);
 });
 
 Route::get('/dashboard', function () {

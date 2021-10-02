@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -85,15 +86,46 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $patches = [
-            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $user->name,
-            'email' => !is_null($request->input('password'))
-                ? $request->input('email') : $user->email,
-            'password' => !is_null($request->input('password')) ?
-                Hash::make($request->input('password')) : $user->password,
-        ];
-        $user->update($patches);
+        // Rules for validating inputs entered by user
+        $rules = [];
+        $rules[] = ['name' => ['required', 'string', 'max:255',]];
+
+        if (isset($request['password']) && !is_null($request->input('password'))) {
+            $rules[] = [
+                'password' => ['required', 'confirmed', Password::default()]
+            ];
+        }
+        if ($request->input('email') != $user->email) {
+            $rules[] = [
+                'email' => 'required', 'string', 'max:255' ,'email', 'unique:users',
+                ];
+        }
+
+        $request->validate($rules);
+
+        if ($request->input('password') != $user->password) {
+            $user->password = Hash::make($request->input('password'));
+        }
+        if ($request->input('name') != $user->name) {
+            $user->name = $request->input('name');
+        }
+        if ($request->input('email') != $user->email) {
+            $user->email = $request->input('email');
+        }
+        ddd($user);
+
+        $user->save();
         return redirect(route('users.index'));
+
+//        $patches = [
+//            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $user->name,
+//            'email' => !is_null($request->input('email'))
+//                ? $request->input('email') : $user->email,
+//            'password' => !is_null($request->input('password')) ?
+//                Hash::make($request->input('password')) : $user->password,
+//        ];
+//        $user->update($patches);
+
     }
 
     /**

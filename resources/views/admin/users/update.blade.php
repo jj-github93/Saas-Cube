@@ -8,9 +8,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{route('users.update', ['user'=>$user->id])}}" method="post">
+                    <form action="{{route('users.update', ['user'=>$user])}}" method="post">
                         @csrf
                         @method('patch')
+
                         <div class="form-control">
                             <label for="username" class="label">
                                 <span class="label-text">Username</span>
@@ -65,6 +66,16 @@
                             </a>
                         </div>
 
+{{--                        @if ($errors->any())--}}
+{{--                            @foreach($errors->any() as $error)--}}
+{{--                                <div class="alert alert-error alert-sm my-2 py-1">--}}
+{{--                                    <p class="flex-1">--}}
+{{--                                        <i class="fas fa-exclamation-triangle mr-4 pl-2 pt-2"></i>--}}
+{{--                                        <span>{{ $error }}</span>--}}
+{{--                                    </p>--}}
+{{--                                </div>--}}
+{{--                            @endforeach--}}
+{{--                        @endif--}}
                     </form>
 
                 </div>

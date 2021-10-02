@@ -25,6 +25,11 @@
                         :active="request()->routeIs('genres*')">
                         {{__('Genres')}}
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('tracks.index')"
+                        :active="request()->routeIs('tracks*')">
+                        {{__('Tracks')}}
+                    </x-nav-link>
                 </div>
 
             </div>
