@@ -50,7 +50,7 @@ class TrackController extends Controller
             'name' => $request->input('name'),
             'artist' => $request->input('artist'),
             'album' => $request->input('album'),
-            'genre' => $request->input('genre') == "No Genre" ? null : $request->input('genre'),
+            'genre_id' => $request->input('genre_id') == 0 ? null : $request->input('genre_id'),
             'track_number' => $request->input('track_number'),
             'length' => $request->input('length'),
             'year' => $request->input('year'),
@@ -91,68 +91,68 @@ class TrackController extends Controller
      */
     public function update(Request $request, Tracks $track)
     {
-//        $rules = [];
-//        if ($request->input('track_number') != $track->track_number) {
-//            $rules[] = ['track_number' => ['required', 'int',]];
-//        }
-//        if ($request->input('name') != $track->name) {
-//            $rules[] = ['name' => ['required', 'string', 'max:255',]];
-//        }
-//        if ($request->input('artist') != $track->artist) {
-//            $rules[] = ['artist' => ['required', 'string', 'max:255',]];
-//        }
-//        if ($request->input('album') != $track->album) {
-//            $rules[] = ['album' => ['required', 'string', 'max:255',]];
-//        }
-//        if ($request->input('genre') != $track->genre) {
-//            $rules[] = ['genre' => ['required', 'string',]];
-//        }
-//        if ($request->input('year') != $track->year) {
-//            $rules[] = ['year' => ['required', 'year',]];
-//        }
-//        if ($request->input('name') != $track->length) {
-//            $rules[] = ['length' => ['required', 'string',]];
-//        }
-//
-//        $request->validate($rules);
-//
-//        ddd($rules);
-//
-//        if ($request->input('track_number') != $track->track_number) {
-//            $track->track_number = $request->input('track_number');
-//        }
-//        if ($request->input('name') != $track->name) {
-//            $track->name = $request->input('name');
-//        }
-//        if ($request->input('artist') != $track->arist) {
-//            $track->artist = $request->input('artist');
-//        }
-//        if ($request->input('album') != $track->album) {
-//            $track->album = $request->input('album');
-//        }
-//        if ($request->input('genre') != $track->genre) {
-//            $track->genre = $request->input('genre');
-//        }
-//        if ($request->input('year') != $track->year) {
-//            $track->year = $request->input('year');
-//        }
-//        if ($request->input('name') != $track->length) {
-//            $track->length = $request->input('length');
-//        }
-//
-//        $track->save();
+        $rules = [];
+        if ($request->input('track_number') != $track->track_number) {
+            $rules[] = ['track_number' => ['required', 'int',]];
+        }
+        if ($request->input('name') != $track->name) {
+            $rules[] = ['name' => ['required', 'string', 'max:255',]];
+        }
+        if ($request->input('artist') != $track->artist) {
+            $rules[] = ['artist' => ['required', 'string', 'max:255',]];
+        }
+        if ($request->input('album') != $track->album) {
+            $rules[] = ['album' => ['required', 'string', 'max:255',]];
+        }
+        if ($request->input('genre_id') != $track->genre_id) {
+            $rules[] = ['genre_id' => ['required', 'integer',]];
+        }
+        if ($request->input('year') != $track->year) {
+            $rules[] = ['year' => ['required', 'year',]];
+        }
+        if ($request->input('name') != $track->length) {
+            $rules[] = ['length' => ['required', 'string',]];
+        }
 
-        $patches = [
-            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $track->name,
-            'track_id' => !is_null(($request->input('track_id'))) ? (int)$request->input('track_id') : $track->track_id,
-            'artist' => !is_null(($request->input('artist'))) ? $request->input('artist') : $track->artist,
-            'album' => !is_null(($request->input('album'))) ? $request->input('album') : $track->album,
-            'genre' => ($request->input('genre') == null) ? null : $request->input('genre'),
-            'length' => !is_null(($request->input('length'))) ? $request->input('length') : $track->length,
-            'year' => !is_null(($request->input('year'))) ? $request->input('year') : $track->year,
-        ];
+        foreach($rules as $rule){
+            $request->validate($rule);
+        }
 
-        $track->update($patches);
+        if ($request->input('track_number') != $track->track_number) {
+            $track->track_number = $request->input('track_number');
+        }
+        if ($request->input('name') != $track->name) {
+            $track->name = $request->input('name');
+        }
+        if ($request->input('artist') != $track->artist) {
+            $track->artist = $request->input('artist');
+        }
+        if ($request->input('album') != $track->album) {
+            $track->album = $request->input('album');
+        }
+        if ($request->input('genre_id') != $track->genre_id) {
+            $track->genre_id = $request->input('genre_id') != 0 ? $request->input('genre_id') : null ;
+        }
+        if ($request->input('year') != $track->year) {
+            $track->year = $request->input('year');
+        }
+        if ($request->input('name') != $track->length) {
+            $track->length = $request->input('length');
+        }
+
+        $track->save();
+
+//        $patches = [
+//            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $track->name,
+//            'track_id' => !is_null(($request->input('track_id'))) ? (int)$request->input('track_id') : $track->track_id,
+//            'artist' => !is_null(($request->input('artist'))) ? $request->input('artist') : $track->artist,
+//            'album' => !is_null(($request->input('album'))) ? $request->input('album') : $track->album,
+//            'genre_id' => ($request->input('genre_id') == 0) ? null : $request->input('genre_id'),
+//            'length' => !is_null(($request->input('length'))) ? $request->input('length') : $track->length,
+//            'year' => !is_null(($request->input('year'))) ? $request->input('year') : $track->year,
+//        ];
+//
+//        $track->update($patches);
 
         return redirect(route("tracks.index"));
     }

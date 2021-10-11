@@ -12,4 +12,13 @@ class Genre extends Model
     protected $fillable = [
         'name', 'parent_id', 'icon'
     ];
+
+    protected $parentColumn = 'parent_id';
+
+    function parent(){
+        return $this->belongsTo(Genre::class, $this->parentColumn);
+    }
+    function tracks(){
+        return $this->hasMany(Tracks::class);
+    }
 }

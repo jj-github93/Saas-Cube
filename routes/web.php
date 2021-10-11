@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PlaylistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,16 +15,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::prefix('admin')->group(function(){
-    Route::resource('users',App\Http\Controllers\Admin\UserController::class);
+Route::prefix('admin')->group(function () {
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
     Route::resource('genres', App\Http\Controllers\Admin\GenreController::class);
     Route::resource('tracks', App\Http\Controllers\Admin\TrackController::class);
+    Route::resource('playlists', App\Http\Controllers\Admin\PlaylistController::class);
 });
+
+//Route::patch('/admin/playlists/{playlist}/remove/{track}', PlaylistController::class)->name('playlists.remove');
+Route::get('admin/playlists/{playlist}/remove/{track}', [PlaylistController::class, 'remove'])
+    ->name('playlists.remove');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -31,4 +36,4 @@ Route::get('/dashboard', function () {
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

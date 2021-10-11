@@ -58,14 +58,14 @@
                         </div>
                         {{-- Genre --}}
                         <div class="form-control">
-                            <label for="genre" class="label">
+                            <label for="genre_id" class="label">
                                 <span class="label-text">Genre</span>
                             </label>
-                            <select name="genre" id="genre"
+                            <select name="genre_id" id="genre_id"
                                     class="select select-bordered w-full max-w-xs">
                                 <option value="0">No Genre</option>
                                 @foreach($genres as $key=>$genre)
-                                    <option value="{{$genre->name}}">{{$genre->id . " " . $genre->name}}</option>
+                                    <option value="{{$genre->id}}">{{$genre->name}}</option>
                                 @endforeach
                             </select>
                         </div>

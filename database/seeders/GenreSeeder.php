@@ -127,9 +127,15 @@ class GenreSeeder extends Seeder
                 'parent_id' => null,
                 'icon' => '016-genre.png'
             ],
+            [
+                'name' => 'Hip Hop',
+                'parent_id' => null,
+                'icon' => '17-hiphop.png'
+            ]
 
 
         ];
+
         foreach ($seedGenres as $genre) {
             Genre::create($genre);
         }

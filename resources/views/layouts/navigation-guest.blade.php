@@ -30,6 +30,11 @@
                         :active="request()->routeIs('tracks*')">
                         {{__('Tracks')}}
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('playlists.index')"
+                        :active="request()->routeIs('playlists*')">
+                        {{__('Playlists')}}
+                    </x-nav-link>
                 </div>
 
             </div>

@@ -97,12 +97,13 @@ class UserController extends Controller
         }
         if ($request->input('email') != $user->email) {
             $rules[] = [
-                'email' => 'required', 'string', 'max:255' ,'email', 'unique:users',
-                ];
+                'email' => 'required', 'string', 'max:255', 'email', 'unique:users',
+            ];
         }
 
-        $request->validate($rules);
-
+        foreach ($rules as $rule) {
+            $request->validate($rule);
+        }
         if ($request->input('password') != $user->password) {
             $user->password = Hash::make($request->input('password'));
         }
@@ -112,10 +113,6 @@ class UserController extends Controller
         if ($request->input('email') != $user->email) {
             $user->email = $request->input('email');
         }
-        ddd($user);
-
-        $user->save();
-        return redirect(route('users.index'));
 
 //        $patches = [
 //            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $user->name,
@@ -125,6 +122,10 @@ class UserController extends Controller
 //                Hash::make($request->input('password')) : $user->password,
 //        ];
 //        $user->update($patches);
+
+        $user->save();
+        return redirect(route('users.index'));
+
 
     }
 

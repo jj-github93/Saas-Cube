@@ -64,7 +64,6 @@
                             </a>
                             <button class="btn btn-sm btn-accent" type="reset">Reset</button>
                         </div>
-
                     </form>
                 </div>
             </div>

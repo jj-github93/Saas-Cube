@@ -4,7 +4,16 @@
             {{__('Edit Genre')}}
         </h2>
     </x-slot>
+
     <div class="py-12">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        @endif
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
@@ -48,9 +57,9 @@
                                 <option value="0">No Parent</option>
                                 @foreach($all_genres as $key=>$value)
                                     @if($value->id == $genre->parent_id && !is_null($genre->parent_id))
-                                        <option selected value="{{$genre->parent_id . " " . $value->name}}"
+                                        <option selected value="{{$value->name}}"
                                     @endif
-                                    <option value="{{$value->id}}">{{$value->id . " " . $value->name}}</option>
+                                    <option value="{{$value->id}}">{{$value->name}}</option>
                                 @endforeach
                             </select>
                         </div>

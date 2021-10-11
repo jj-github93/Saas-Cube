@@ -8,11 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Tracks extends Model
 {
     use Hasfactory;
+
     protected $fillable = [
-        'name', 'artist', 'album', 'genre', 'track_number', 'length', 'year'
+        'name', 'artist', 'album', 'genre_id', 'track_number', 'length', 'year'
     ];
 
-    public function Genre(){
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class, 'playlist_track',
+            'track_id', 'playlist_id');
+    }
+    public function genre(){
         return $this->belongsTo(Genre::class);
     }
 }
