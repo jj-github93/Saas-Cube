@@ -9,18 +9,44 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <dl class="grid grid-cols-6 gaps-2">
-                        <dt class="col-span-1">ID</dt>
-                        <dd class="col-span-5">{{$user->id}}</dd>
-                        <dt class="col-span-1">Name</dt>
-                        <dd class="col-span-5">{{$user->name}}</dd>
-                        <dt class="col-span-1">Email</dt>
-                        <dd class="col-span-5">{{$user->email}}</dd>
-                        <dt class="col-span-1">Added</dt>
-                        <dd class="col-span-5">{{$user->created_at}}</dd>
-                        <dt class="col-span-1">Last Logged In</dt>
-                        <dd class="col-span-5">{{ '-' }}</dd>
-                        <dt class="col-span-1">Actions</dt>
-                        <dd class="col-span-5">
+                        <dt class="col-span-1 mb-2">ID</dt>
+                        <dd class="col-span-5 mb-2">{{$user->id}}</dd>
+                        <dt class="col-span-1 mb-2">Name</dt>
+                        <dd class="col-span-5 mb-2">{{$user->name}}</dd>
+                        <dt class="col-span-1 mb-2">Email</dt>
+                        <dd class="col-span-5 mb-2">{{$user->email}}</dd>
+                        <dt class="col-span-1 mb-2">Playlists</dt>
+                        @if($user->playlist->count() != 0)
+                            @foreach($user->playlist as $playlist)
+                                <dd class="col-span-5 mb-2">
+                                    <table class="table table-zebra">
+                                        <thead>
+                                        <tr>
+                                            <th>Playlist Name</th>
+                                            <th>Tracks</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{$playlist->name}}</td>
+                                            <td>{{$playlist->tracks->count()}}</td>
+                                            <td><a href="{{route('playlists.show', ['playlist'=>$playlist])}}" class="btn-primary p-2 rounded-md">View</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            @endforeach
+                        @else
+                            <dd class="col-span-5 mb-2">-</dd>
+
+                        @endif
+                        <dt class="col-span-1 mb-2">Added</dt>
+                        <dd class="col-span-5 mb-2">{{$user->created_at}}</dd>
+                        <dt class="col-span-1 mb-2">Last Logged In</dt>
+                        <dd class="col-span-5 mb-2">{{ '-' }}</dd>
+                        <dt class="col-span-1 mb-2">Actions</dt>
+                        <dd class="col-span-5 mb-2">
                             <form
                                 action="{{route('users.destroy',['user'=>$user])}}"
                                 method="post">
