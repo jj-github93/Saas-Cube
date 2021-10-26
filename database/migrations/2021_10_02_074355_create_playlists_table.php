@@ -16,6 +16,8 @@ class CreatePlaylistsTable extends Migration
         Schema::create('playlists', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('user_id')->nullable()->default(null);
+            $table->boolean('protected')->default(true);
             $table->timestamps();
         });
     }

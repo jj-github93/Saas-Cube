@@ -30,6 +30,44 @@
                                            id="name"
                                            name="name">
                                 </div>
+                                {{-- Playlist Privacy --}}
+                                <div class="form-control">
+                                    <label for="protected" class="label">
+                                        <span class="label-text">Protected</span>
+                                    </label>
+                                    <select
+                                        class="select select-bordered w-full max-w-xs"
+                                        name="protected" id="protected">
+                                        <option value="1">Private</option>
+                                        @if($playlist->protected == false)
+                                            <option selected value="false">Public</option>
+                                        @else
+                                            <option value="0">Public</option>
+                                        @endif
+
+
+                                    </select>
+                                </div>
+                                '
+                                {{-- Playlist User --}}
+                                <div class="form-control">
+                                    <label for="user_id" class="label">
+                                        <span class="label-text">User</span>
+                                    </label>
+                                    <select
+                                        class="select select-bordered w-full max-w-xs"
+                                        name="user_id" id="user_id">
+                                        <option value="{{null}}">No User</option>
+                                        @foreach($users as $user)
+                                            @if($user->id == $playlist->user_id)
+                                                <option selected value="{{$user->id}}">{{$user->name}}</option>
+                                            @else
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                            @endif
+
+                                        @endforeach
+                                    </select>
+                                </div>
 
                                 {{--Remove Tracks--}}
                                 <div class="py-2 overflow-x-auto">

@@ -6,10 +6,6 @@
     </x-slot>
     <div class="py-12">
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <strong>Whoops!</strong> There was a problem with your input.
-            </div>
-            <br><br>
             <ul>
                 @foreach($errors->all() as $error)
                     <li>{{$error}}</li>
@@ -56,14 +52,14 @@
                                    name="password">
                         </div>
                         <div class="form-control">
-                            <label for="confirm_password" class="label">
+                            <label for="password_confirmation" class="label">
                                 <span class="label-text">Confirm Password</span>
                             </label>
                             <input type="password"
                                    class="input input-bordered"
                                    placeholder="Confirm Password"
-                                   id="confirm_password"
-                                   name="confirm_password">
+                                   id="password_confirmation"
+                                   name="password_confirmation">
                         </div>
                         <div class="py-6">
                             <button
@@ -77,16 +73,16 @@
                             </a>
                         </div>
 
-{{--                        @if ($errors->any())--}}
-{{--                            @foreach($errors->any() as $error)--}}
-{{--                                <div class="alert alert-error alert-sm my-2 py-1">--}}
-{{--                                    <p class="flex-1">--}}
-{{--                                        <i class="fas fa-exclamation-triangle mr-4 pl-2 pt-2"></i>--}}
-{{--                                        <span>{{ $error }}</span>--}}
-{{--                                    </p>--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
-{{--                        @endif--}}
+                        {{--                        @if ($errors->any())--}}
+                        {{--                            @foreach($errors->any() as $error)--}}
+                        {{--                                <div class="alert alert-error alert-sm my-2 py-1">--}}
+                        {{--                                    <p class="flex-1">--}}
+                        {{--                                        <i class="fas fa-exclamation-triangle mr-4 pl-2 pt-2"></i>--}}
+                        {{--                                        <span>{{ $error }}</span>--}}
+                        {{--                                    </p>--}}
+                        {{--                                </div>--}}
+                        {{--                            @endforeach--}}
+                        {{--                        @endif--}}
                     </form>
 
                 </div>

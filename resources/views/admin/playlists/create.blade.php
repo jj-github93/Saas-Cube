@@ -21,6 +21,32 @@
                                    id="name"
                                    name="name">
                         </div>
+                        {{-- Playlist Privacy --}}
+                        <div class="form-control">
+                            <label for="protected" class="label">
+                                <span class="label-text">Protected</span>
+                            </label>
+                            <select
+                                class="select select-bordered w-full max-w-xs"
+                                name="protected" id="protected">
+                                <option selected value="1">Private</option>
+                                <option value="0">Public</option>
+                            </select>
+                        </div>'
+                        {{-- Playlist User --}}
+                        <div class="form-control">
+                            <label for="user_id" class="label">
+                                <span class="label-text">User</span>
+                            </label>
+                            <select
+                                class="select select-bordered w-full max-w-xs"
+                                name="user_id" id="user_id">
+                                <option selected value="{{null}}">No User</option>
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="py-6">
                             <button

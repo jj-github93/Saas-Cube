@@ -40,8 +40,13 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'parent_id' => 'required',
+
+            'name' => ['required', 'string', 'max:255',],
+
+            'parent_id' => ['required', 'integer',],
+
+            'icon' => ['string', 'max:255'],
+
         ]);
         Genre::create([
             'name' => $request->input('name'),
@@ -85,12 +90,23 @@ class GenreController extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        $patches = [
-            'name' => !is_null($request->input('name')) ? $request->input('name') : $genre->name,
-            'icon' => !is_null($request->input('icon')) ? $request->input('icon') : $genre->icon,
-            'parent_id' => ($request->input('parent_id') == 0) ? null : $request->input('parent_id'),
-        ];
-        $genre->update($patches);
+        $request->validate([
+            'name' => ['required', 'string', 'max:255',],
+            'icon' => ['string', 'max:255'],
+            'parent_id' => ['required', 'integer',],
+        ]);
+
+        if (isset($request['name']) && ($request->input != $genre->name)) {
+            $genre->name = $request->input('name');
+        }
+        if (isset($request['name']) && ($request->input != $genre->name)) {
+            $genre->icon = $request->input('icon');
+        }
+
+        // Sets the parent_id variable to null if the request value is 0
+        $genre->parent_id = ($request->input('parent_id') == 0) ? null : $request->input('parent_id');
+
+        $genre->save();
         return redirect(route('genres.index'));
     }
 
@@ -104,8 +120,5 @@ class GenreController extends Controller
     {
         $genre->delete();
         return redirect(route('genres.index'));
-        //redirect(route('genres.delete'), compact(['genre']));
-
     }
-
 }

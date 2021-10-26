@@ -16,10 +16,12 @@ class PlaylistSeeder extends Seeder
     {
         $playlists = [
             [
-                'name' => 'Test Playlist'
+                'name' => 'Test Playlist',
+                //'owner' => 2
             ],
             [
-                'name' => 'Admin Playlist'
+                'name' => 'Admin Playlist',
+                //'owner' => 1,
             ],
         ];
 

@@ -13,6 +13,10 @@
                         <dd class="col-span-5 py-1">{{$playlist->id}}</dd>
                         <dt class="col-span-1 font-bold py-1">Name</dt>
                         <dd class="col-span-5 py-1">{{$playlist->name}}</dd>
+                        <dt class="col-span-1 font-bold py-1">User</dt>
+                        <dd class="col-span-5 py-1">{{$playlist->user->name ?? "None"}}</dd>
+                        <dt class="col-span-1 font-bold py-1">Protection</dt>
+                        <dd class="col-span-5 py-1">{{($playlist->protected == true ? "Private" : "Public")}}</dd>
                         <dt class="col-span-1  py-1 font-bold">Added</dt>
                         <dd class="col-span-5 py-1">{{$playlist->created_at}}</dd>
                         <dt class="col-span-1 py-1 font-bold">Tracks</dt>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -40,18 +41,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        //ddd($request);
+
         $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'confirm_password' => 'required',
+            'name' => ['required', 'string', 'max:255',],
+            'email' => ['required', 'email', 'email:rfc', 'string', 'unique:users'],
+            'password' => ['required', 'confirmed', 'string',
+                Password::min(4)
+                    ->letters()
+                //->mixedCase()
+                //->numbers()
+                //->symbols()
+            ],
+            'password_confirmation' => ['required', 'string', 'required_with:password'],
         ]);
 
         User::create([
             'name' => $request->input('name'),
-            'password' => $request->input('password'),
             'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password'))
         ]);
+
+
         return redirect(route('users.index'));
     }
 
@@ -87,41 +98,28 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         // Rules for validating inputs entered by user
-        $rules = [];
-        $rules[] = ['name' => ['required', 'string', 'max:255',]];
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['string', 'email', 'email:rfc', Rule::unique('users')->ignore($user)],
+            'password' => (isset($request->password) && !is_null($request->password) ? [
+                'string', 'confirmed',
+                Password::min(4)
+                    ->letters()
+//                    ->numbers()
+//                    ->symbols()
+//                    ->mixedCase()
+            ] : [null]),
+        ]);
 
-        if (isset($request['password']) && !is_null($request->input('password'))) {
-            $rules[] = [
-                'password' => ['required', 'confirmed', Password::default()]
-            ];
-        }
-        if ($request->input('email') != $user->email) {
-            $rules[] = [
-                'email' => 'required', 'string', 'max:255', 'email', 'unique:users',
-            ];
-        }
-
-        foreach ($rules as $rule) {
-            $request->validate($rule);
-        }
-        if ($request->input('password') != $user->password) {
+        if (!is_null($request->input('password')) && ($request->input('password') != $user->password)) {
             $user->password = Hash::make($request->input('password'));
         }
-        if ($request->input('name') != $user->name) {
+        if (isset($request['name']) && ($request->input('name') != $user->name)) {
             $user->name = $request->input('name');
         }
-        if ($request->input('email') != $user->email) {
+        if (isset($request['email']) && ($request->input('email') != $user->email)) {
             $user->email = $request->input('email');
         }
-
-//        $patches = [
-//            'name' => !is_null(($request->input('name'))) ? $request->input('name') : $user->name,
-//            'email' => !is_null($request->input('email'))
-//                ? $request->input('email') : $user->email,
-//            'password' => !is_null($request->input('password')) ?
-//                Hash::make($request->input('password')) : $user->password,
-//        ];
-//        $user->update($patches);
 
         $user->save();
         return redirect(route('users.index'));

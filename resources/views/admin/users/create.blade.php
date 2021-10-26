@@ -7,6 +7,14 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{$error}}</li>
+                            @endforeach
+                        </ul>
+                        @endif
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form action="{{route('users.store')}}" method="post">
                         @csrf
@@ -43,14 +51,14 @@
                                    name="password">
                         </div>
                         <div class="form-control">
-                            <label for="confirm_password" class="label">
+                            <label for="password_confirmation" class="label">
                                 <span class="label-text">Confirm Password</span>
                             </label>
                             <input type="password"
                                    class="input input-bordered"
                                    placeholder="Confirm Password"
-                                   id="confirm_password"
-                                   name="confirm_password">
+                                   id="password_confirmation"
+                                   name="password_confirmation">
                         </div>
                         <div class="py-6">
                             <button

@@ -18,10 +18,10 @@ class CreateTracksTable extends Migration
             $table->string('name');
             $table->integer('track_number')->default(1);
             $table->string('artist');
-            $table->foreignId('genre_id');
-            $table->string('album')->nullable()->default(null);
+            $table->foreignId('genre_id')->nullable()->default(null);
+            $table->string('album')->nullable()->default('No Album');
             $table->string('length')->nullable();
-            $table->year('year');
+            $table->year('year')->nullable();
             $table->timestamps();
         });
     }

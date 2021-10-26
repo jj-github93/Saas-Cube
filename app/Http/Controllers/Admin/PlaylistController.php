@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Playlist;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Tracks;
 
@@ -29,7 +30,9 @@ class PlaylistController extends Controller
      */
     public function create()
     {
-        return view('admin.playlists.create');
+        $users = User::all();
+
+        return view('admin.playlists.create', compact(['users']));
     }
 
     /**
@@ -40,12 +43,17 @@ class PlaylistController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
-            'name' => 'required',
+            'name' => ['required', 'string', 'max:64',],
+            'protected' => ['required', 'bool'],
+            'user_id' => ['nullable', 'integer']
         ]);
 
         Playlist::create([
             'name' => $request->input('name'),
+            'protected' => $request->input('protected'),
+            'user_id' => $request->input('user_id'),
         ]);
 
         return redirect(route('playlists.index'));
@@ -70,8 +78,9 @@ class PlaylistController extends Controller
      */
     public function edit(Playlist $playlist)
     {
+        $users = User::all();
         $all_tracks = Tracks::all();
-        return view('admin.playlists.update', compact(['playlist', 'all_tracks']));
+        return view('admin.playlists.update', compact(['playlist', 'all_tracks', 'users']));
     }
 
     /**
@@ -83,15 +92,22 @@ class PlaylistController extends Controller
      */
     public function update(Request $request, Playlist $playlist)
     {
-        $rules = [];
-        $rules[] = ['name' => ['required', 'string', 'max:255'],];
+        //ddd($request);
 
-        foreach ($rules as $rule) {
-            $request->validate($rule);
-        }
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'protected' => ['required', 'bool'],
+            'user_id' => ['nullable', 'numeric']
+        ]);
 
-        if ($request->input('name') != $playlist->name) {
+        if (isset($request['name']) && $request->input('name') != $playlist->name) {
             $playlist->name = $request->input('name');
+        }
+        if($request->input('user_id') != $playlist->user_id){
+            $playlist->user_id = $request->input('user_id');
+        }
+        if($request->input('protected') != $playlist->protected){
+            $playlist->protected = $request->input('protected');
         }
 
         $playlist->tracks()->attach($request->add_tracks);
@@ -99,8 +115,9 @@ class PlaylistController extends Controller
         $playlist->save();
 
         $all_tracks = Tracks::all();
+        $users = User::all();
 
-        return view('admin.playlists.update', compact(['playlist', 'all_tracks']));
+        return view('admin.playlists.update', compact(['playlist', 'all_tracks', 'users']));
 
     }
 
