@@ -1,4 +1,5 @@
-<x-guest-layout>
+<link rel="stylesheet" href="{{asset('css/app.css')}}">
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{__('Welcome')}}
@@ -160,4 +161,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</x-app-layout>

@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('User Details')}}
@@ -13,6 +13,13 @@
                         <dd class="col-span-5 mb-2">{{$user->id}}</dd>
                         <dt class="col-span-1 mb-2">Name</dt>
                         <dd class="col-span-5 mb-2">{{$user->name}}</dd>
+                        <dt class="col-span-1 mb-2">Role</dt>
+                        <dd class="col-span-5 mb-2">
+                            <span class="bg-green-400 text-green-900 text-sm font-medium mr-2 px-3 py-1 rounded-md">
+                                {{$userRole ?? 'No role set'}}
+                            </span>
+                        </dd>
+
                         <dt class="col-span-1 mb-2">Email</dt>
                         <dd class="col-span-5 mb-2">{{$user->email}}</dd>
                         <dt class="col-span-1 mb-2">Playlists</dt>
@@ -70,4 +77,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</x-app-layout>

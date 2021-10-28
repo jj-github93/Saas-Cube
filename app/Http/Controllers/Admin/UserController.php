@@ -5,12 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    function __construct(){
+        $this->middleware('permission:user-list|user-create|user-edit|user-delete|',
+            ['only' => ['index', 'store']]
+        );
+        $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:user-edit', ['only' => 'edit', 'update']);
+        $this->middleware('permission:user-delete', ['only' => 'destroy', 'delete']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +41,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::pluck('name', 'name')->all();
+
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -54,16 +67,23 @@ class UserController extends Controller
                 //->symbols()
             ],
             'password_confirmation' => ['required', 'string', 'required_with:password'],
+            'roles' => ['required'],
         ]);
 
-        User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password'))
-        ]);
+        $inputs = $request->all();
+        $inputs['password'] = Hash::make($inputs['password']);
+
+        $user = User::create($inputs);
+        $user->assignRole($request->input('roles'));
+
+//        User::create([
+//            'name' => $request->input('name'),
+//            'email' => $request->input('email'),
+//            'password' => Hash::make($request->input('password'))
+//        ]);
 
 
-        return redirect(route('users.index'));
+        return redirect(route('users.index'))->with('success', 'User created successfully');
     }
 
     /**
@@ -74,7 +94,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('admin.users.show', compact('user'));
+        $userRole = $user->roles->pluck('name', 'name')->first();
+
+        return view('admin.users.show', compact('user', 'userRole'));
     }
 
     /**
@@ -85,7 +107,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.update', compact(['user']));
+        $roles = Role::pluck('name', 'name')->all();
+        $userRoles = $user->roles->pluck('name', 'name')->first();
+        return view('admin.users.update', compact(['user', 'userRoles', 'roles']));
     }
 
     /**
@@ -101,6 +125,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['string', 'email', 'email:rfc', Rule::unique('users')->ignore($user)],
+            'roles' => ['required'],
             'password' => (isset($request->password) && !is_null($request->password) ? [
                 'string', 'confirmed',
                 Password::min(4)
@@ -111,18 +136,33 @@ class UserController extends Controller
             ] : [null]),
         ]);
 
-        if (!is_null($request->input('password')) && ($request->input('password') != $user->password)) {
-            $user->password = Hash::make($request->input('password'));
-        }
-        if (isset($request['name']) && ($request->input('name') != $user->name)) {
-            $user->name = $request->input('name');
-        }
-        if (isset($request['email']) && ($request->input('email') != $user->email)) {
-            $user->email = $request->input('email');
-        }
+        $inputs = $request->all();
 
-        $user->save();
-        return redirect(route('users.index'));
+        if(!empty($inputs['password'])){
+            $inputs['password'] = Hash::make($inputs['password']);
+        }
+        else{
+            $inputs = Arr::except($inputs, array('password'));
+        }
+        $user->update($inputs);
+
+        DB::table('model_has_roles')
+            ->where('model_id', $user->id)
+            ->delete();
+        $user->assignRole($request->input(['roles']));
+
+//        if (!is_null($request->input('password')) && ($request->input('password') != $user->password)) {
+//            $user->password = Hash::make($request->input('password'));
+//        }
+//        if (isset($request['name']) && ($request->input('name') != $user->name)) {
+//            $user->name = $request->input('name');
+//        }
+//        if (isset($request['email']) && ($request->input('email') != $user->email)) {
+//            $user->email = $request->input('email');
+//        }
+//          $user->save();
+        return redirect(route('users.index'))
+            ->with('success', 'User updated successfully');
 
 
     }
@@ -136,7 +176,8 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect(route('users.index'));
+        return redirect(route('users.index'))
+            ->with('success', 'User has been deleted');
     }
 
 

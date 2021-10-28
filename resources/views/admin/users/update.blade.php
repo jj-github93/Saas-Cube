@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('Edit User')}}
@@ -29,6 +29,20 @@
                                    value="{{old('name') ?? $user->name}}"
                                    id="username"
                                    name="name">
+                        </div>
+                        <div class="form-control">
+                            <label for="roles" class="label">
+                                <span class="label-text">
+                                    Role
+                                </span>
+                            </label>
+                            <select name="roles" id="roles">
+                                @foreach($roles as $role)
+                                    @if($role != 'Admin')
+                                        <option {{$userRoles != 'Manager' || $userRoles != 'Admin' ? 'disabled' : ''}}value="{{$role}}">{{$role}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-control">
                             <label for="email" class="label">
@@ -89,4 +103,6 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</x-app-layout>
+<!-- TODO: Update users/create.blade file. Add role and permission functionality -->
+

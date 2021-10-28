@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('Add Role')}}
@@ -51,6 +51,6 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</x-app-layout>
 
-<!-- TODO: Update roles/create.blade file -->
+<!-- TODO: Update permission/create.blade file -->

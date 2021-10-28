@@ -10,6 +10,14 @@ use App\Models\Tracks;
 
 class PlaylistController extends Controller
 {
+    function __construct(){
+        $this->middleware('permission:playlist-list|playlist-create|playlist-edit|playlist-delete|',
+            ['only' => ['index', 'store']]
+        );
+        $this->middleware('permission:playlist-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:playlist-edit', ['only' => 'edit', 'update']);
+        $this->middleware('permission:playlist-delete', ['only' => 'destroy', 'delete']);
+    }
     /**
      * Display a listing of the resource.
      *

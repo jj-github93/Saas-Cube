@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('Users')}}
@@ -8,7 +8,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    Index
                     <div class="overflow-x-auto">
                         <table class="table w-full table-zebra">
                             <thead>
@@ -16,7 +15,7 @@
                                 <th></th>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Last Logged In</th>
+                                <th>Role</th>
                                 <th class="flex justify-between">
                                     <span class="pt-2">Action
 
@@ -35,10 +34,17 @@
                                     <td class="small">{{$key+1}}</td>
                                     <td>{{$user->id}}</td>
                                     <td>{{$user->name}}</td>
-                                    <td> - </td>
                                     <td>
-                                        <a href="{{url('/admin/users/' . $user->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
-                                        <a href="{{url('/admin/users/' . $user->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        <span
+                                            class="bg-green-400 text-green-900 text-sm font-medium mr-2 px-3 py-1 rounded-md">
+                                            {{ $user->roles->pluck('name', 'name')->first()}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{url('/admin/users/' . $user->id)}}"
+                                           class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                        <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
+                                           class="btn btn-sm btn-secondary text-gray-50">Update</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -57,4 +63,5 @@
         </div>
     </div>
 
-</x-guest-layout>
+</x-app-layout>
+

@@ -12,9 +12,35 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
+                        {{ __('Home') }}
                     </x-nav-link>
+                    @can('user-list')
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users*')">
+                            {{__('Users')}}
+                        </x-nav-link>
+                    @endcan
+                    @can('genre-list')
+                        <x-nav-link
+                            :href="route('genres.index')"
+                            :active="request()->routeIs('genres*')">
+                            {{__('Genres')}}
+                        </x-nav-link>
+                    @endcan
+                    @can('track-list')
+                        <x-nav-link
+                            :href="route('tracks.index')"
+                            :active="request()->routeIs('tracks*')">
+                            {{__('Tracks')}}
+                        </x-nav-link>
+                    @endcan
+                    @can('playlist-list')
+                        <x-nav-link
+                            :href="route('playlists.index')"
+                            :active="request()->routeIs('playlists*')">
+                            {{__('Playlists')}}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -38,7 +64,7 @@
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                             onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -80,7 +106,7 @@
                     @csrf
 
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                                           onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

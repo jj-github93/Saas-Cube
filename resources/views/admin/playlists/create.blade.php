@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('Add Playlist')}}
@@ -66,4 +66,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+</x-app-layout>

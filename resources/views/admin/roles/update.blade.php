@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('Edit Playlist')}}
@@ -40,7 +40,7 @@
                                         name="protected" id="protected">
                                         <option value="1">Private</option>
                                         @if($playlist->protected == false)
-                                            <option selected value="false">Public</option>
+                                            <option selected value="0">Public</option>
                                         @else
                                             <option value="0">Public</option>
                                         @endif
@@ -156,4 +156,6 @@
                     </div>
                 </div>
             </div>
-</x-guest-layout>
+</x-app-layout>
+<!-- TODO: Update roles/update.blade file -->
+

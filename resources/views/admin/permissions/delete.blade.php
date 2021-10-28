@@ -1,1 +1,1 @@
-<!-- TODO: Update roles/delete.blade file -->
+<!-- TODO: Update permission/delete.blade file -->

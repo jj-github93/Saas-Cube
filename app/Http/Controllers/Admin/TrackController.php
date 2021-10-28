@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class TrackController extends Controller
 {
+    function __construct(){
+        $this->middleware('permission:track-list|track-create|track-edit|track-delete|',
+            ['only' => ['index', 'store']]
+        );
+        $this->middleware('permission:track-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:track-edit', ['only' => 'edit', 'update']);
+        $this->middleware('permission:track-delete', ['only' => 'destroy', 'delete']);
+    }
     /**
      * Display a listing of the resource.
      *

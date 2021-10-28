@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
             {{__('Playlists')}}
@@ -55,6 +55,6 @@
         </div>
     </div>
 
-</x-guest-layout>
-<!-- TODO: Update roles/index.blade file -->
+</x-app-layout>
+<!-- TODO: Update permission/index.blade file -->
 

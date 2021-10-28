@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <script type="text/javascript" src="resources/js/range_value.js"></script>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
@@ -118,5 +118,5 @@
                     </div>
             </div>
         </div>
-</x-guest-layout>
+</x-app-layout>
 
