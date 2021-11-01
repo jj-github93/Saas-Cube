@@ -25,11 +25,37 @@
                         <div class="form-control">
                             <label for="permissions" class="label">
                                 <span class="label-text">
-                                    Role Permissions
+                                    Permissions
                                 </span>
                             </label>
+                            <table class="w-full table table-compact">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Role Name</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($all_permissions as $permission)
+                                    @if(!$playlist->tracks->contains('id', $track->id))
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox"
+                                                       name="permissions[]"
+                                                       value="{{$permission->id}}">
+                                            </td>
+                                            <td>{{$permission->id}}</td>
+                                            <td>{{$permission->name}}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                </tbody>
+                            </table>
                             <select name="permissions[]" id="permissions[]">
                                 <option disabled value="0"></option>
+                                @foreach($permissions as $permission)
+                                    <option value="{{$permission->id}}">{{$permission->name}} </option>
                             </select>
                         </div>
 
@@ -37,11 +63,11 @@
                             <button
                                 class="btn btn-sm btn-primary text-gray-50"
                                 type="submit">
-                                Save Playlist
+                                Save Role
                             </button>
-                            <a href="{{route('playlists.index')}}"
+                            <a href="{{route('roles.index')}}"
                                class="btn btn-sm btn-secondary text-gray-50">
-                                Back To Playlists
+                                Back To Roles
                             </a>
                             <button class="btn btn-sm btn-accent" type="reset">Reset</button>
                         </div>

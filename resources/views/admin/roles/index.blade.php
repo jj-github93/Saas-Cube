@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
-            {{__('Playlists')}}
+            {{__('Roles')}}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -21,22 +21,21 @@
 
                                     </span>
                                     <a
-                                        href="{{route('playlists.create')}}"
+                                        href="{{route('roles.create')}}"
                                         class="btn btn-sm btn-tertiary tet-gray-50">
-                                        Create Playlist
+                                        Create Role
                                     </a>
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($playlists as $key=>$playlist)
+                            @foreach($roles as $key=>$role)
                                 <tr class="hover">
-                                    <td class="small">{{$key+1}}</td>
-                                    <td>{{$playlist->id}}</td>
-                                    <td>{{$playlist->name}}</td>
+                                    <td>{{$role->id}}</td>
+                                    <td>{{$role->name}}</td>
                                     <td>
-                                        <a href="{{url('/admin/playlists/' . $playlist->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
-                                        <a href="{{url('/admin/playlists/' . $playlist->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        <a href="{{url('/admin/roles/' . $role->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                        <a href="{{url('/admin/roles/' . $role->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -44,7 +43,7 @@
                             <tfoot>
                             <tr>
                                 <td colspan="6">
-                                    {{$playlists->onEachSide(1)->links()}}
+                                    {{$roles->onEachSide(1)->links()}}
                                 </td>
                             </tr>
                             </tfoot>

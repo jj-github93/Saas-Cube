@@ -41,6 +41,21 @@
                             {{__('Playlists')}}
                         </x-nav-link>
                     @endcan
+{{--                    TODO: Update role and permission routes--}}
+{{--                    @can('role-list')--}}
+{{--                        <x-nav-link--}}
+{{--                            :href="route('roles.index')"--}}
+{{--                            :active="request()->routeIs('roles*')">--}}
+{{--                            {{__('Roles')}}--}}
+{{--                        </x-nav-link>--}}
+{{--                    @endcan--}}
+{{--                    @can('permission-list')--}}
+{{--                        <x-nav-link--}}
+{{--                            :href="route('playlists.index')"--}}
+{{--                            :active="request()->routeIs('playlists*')">--}}
+{{--                            {{__('Permissions')}}--}}
+{{--                        </x-nav-link>--}}
+{{--                    @endcan--}}
                 </div>
             </div>
 
