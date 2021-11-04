@@ -16,6 +16,7 @@
                                 <th></th>
                                 <th>ID</th>
                                 <th>Name</th>
+                                <th>Protection</th>
                                 <th class="flex justify-between">
                                     <span class="pt-2">Action
 
@@ -34,12 +35,23 @@
                                     <td class="small">{{$key+1}}</td>
                                     <td>{{$playlist->id}}</td>
                                     <td>{{$playlist->name}}</td>
+                                    <td>{{$playlist->protected == 1 ? "Private" : 'Public'}}</td>
                                     <td>
-                                        <a href="{{url('/admin/playlists/' . $playlist->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
-                                        <a href="{{url('/admin/playlists/' . $playlist->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        <a href="{{url('/admin/playlists/' . $playlist->id)}}"
+                                           class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                        @if($user->can('playlist-edit') || $user->can('edit-public-playlist'))
+                                            <a href="{{url('/admin/playlists/' . $playlist->id . '/edit')}}"
+                                               class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        @else
+                                            <a href="{{url('/admin/playlists/' . $playlist->id . '/edit')}}"
+                                               {{($user->id == $playlist->user_id) ? "" : "disabled" }}
+                                               class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
+
+
                             </tbody>
                             <tfoot>
                             <tr>

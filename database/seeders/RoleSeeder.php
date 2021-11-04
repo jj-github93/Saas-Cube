@@ -17,22 +17,38 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $this->ManagerPermissions();
-        Role::create(['name' => "Astronaut"]);
+        $this->AstronautPermissions();
 
     }
 
     public function ManagerPermissions()
     {
         $managerPermissions = [
-            'playlist-list', 'playlist-create', 'playlist-edit', 'playlist-delete',
-            'track-list', 'track-create', 'track-edit', 'track-delete',
-            'user-list', 'user-edit',
+            'edit-public-playlist', 'delete-public-playlist', 'view-public-playlist',
+            'playlist-create', 'track-list', 'track-create', 'track-edit', 'track-delete',
+            'user-list', 'user-edit', 'user-delete', 'user-create', 'edit-own-profile'
         ];
         $manager = Role::create(['name' => "Manager"]);
 
 
         $manager->syncPermissions($managerPermissions);
         $user = User::find(5);
-        $user->assignRole([$manager]);
+        $user->assignRole(['Manager']);
+        $user = User::find(10);
+        $user->assignRole(['Manager']);
+    }
+
+    public function AstronautPermissions()
+    {
+        $astroPermissions = [
+            'edit-own-profile', 'playlist-create', 'view-own-playlist',
+            'view-public-playlist', 'delete-own-playlist',
+        ];
+        $astronaut = Role::create(['name' => "Astronaut"]);
+        $astronaut->syncPermissions($astroPermissions);
+        $user = User::find(6);
+        $user->assignRole(['Astronaut']);
+
+
     }
 }

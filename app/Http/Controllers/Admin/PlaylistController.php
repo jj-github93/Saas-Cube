@@ -7,17 +7,21 @@ use App\Models\Playlist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Tracks;
+use Illuminate\Support\Facades\Auth;
 
 class PlaylistController extends Controller
 {
-    function __construct(){
+    function __construct()
+    {
         $this->middleware('permission:playlist-list|playlist-create|playlist-edit|playlist-delete|',
             ['only' => ['index', 'store']]
         );
         $this->middleware('permission:playlist-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:playlist-edit', ['only' => 'edit', 'update']);
-        $this->middleware('permission:playlist-delete', ['only' => 'destroy', 'delete']);
+        $this->middleware('permission:playlist-edit|edit-public-playlist|edit-own-playlist', ['only' => 'edit', 'update']);
+        $this->middleware('permission:playlist-delete|delete-public-playlist|delete-own-playlist', ['only' => 'destroy', 'delete']);
+
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,9 +29,21 @@ class PlaylistController extends Controller
      */
     public function index()
     {
-        $playlists = Playlist::paginate(10);
+        $user = auth()->user();
+        if ($user->can('view-public-playlist')) {
+            $playlists = Playlist::where('protected', 0)
+                ->paginate(10);
+        }
+        if ($user->can('view-own-playlist')) {
+            $playlists = Playlist::where('protected', 0)
+                ->orWhere('user_id', $user->id)
+                ->paginate(10);
+        }
+        if ($user->can('playlist-list')) {
+            $playlists = Playlist::paginate(10);
+        }
 
-        return view('admin.playlists.index', compact(['playlists']))
+        return view('admin.playlists.index', compact(['playlists', 'user']))
             ->with('i', (\request()->input('page', 1) - 1) * 10);
     }
 
@@ -38,7 +54,12 @@ class PlaylistController extends Controller
      */
     public function create()
     {
-        $users = User::all();
+        if (auth()->user()->roles->pluck('name') == 'Admin') {
+            $users = User::all();
+
+        } else {
+            $users = User::find(auth()->user()->id);
+        }
 
         return view('admin.playlists.create', compact(['users']));
     }
@@ -75,7 +96,8 @@ class PlaylistController extends Controller
      */
     public function show(Playlist $playlist)
     {
-        return view('admin.playlists.show', compact(['playlist']));
+        $user = auth()->user();
+        return view('admin.playlists.show', compact(['playlist', 'user']));
     }
 
     /**
@@ -86,7 +108,15 @@ class PlaylistController extends Controller
      */
     public function edit(Playlist $playlist)
     {
-        $users = User::all();
+        $user = auth()->user();
+
+        if ($user->can('playlist-edit')) {
+            $users = User::all();
+        } else if ($user->can('edit-public-playlist')) {
+            $users = User::whereNotIn('name', ['Admin'])->get();
+        } else {
+            $users[] = $user;
+        }
         $all_tracks = Tracks::all();
         return view('admin.playlists.update', compact(['playlist', 'all_tracks', 'users']));
     }
@@ -111,10 +141,10 @@ class PlaylistController extends Controller
         if (isset($request['name']) && $request->input('name') != $playlist->name) {
             $playlist->name = $request->input('name');
         }
-        if($request->input('user_id') != $playlist->user_id){
+        if ($request->input('user_id') != $playlist->user_id) {
             $playlist->user_id = $request->input('user_id');
         }
-        if($request->input('protected') != $playlist->protected){
+        if ($request->input('protected') != $playlist->protected) {
             $playlist->protected = $request->input('protected');
         }
 

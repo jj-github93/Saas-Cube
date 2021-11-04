@@ -16,12 +16,32 @@ class PlaylistSeeder extends Seeder
     {
         $playlists = [
             [
-                'name' => 'Test Playlist',
-                //'owner' => 2
+                'name' => 'Private Astronaut Playlist',
+                'user_id' => 6
             ],
             [
-                'name' => 'Admin Playlist',
-                //'owner' => 1,
+                'name' => 'Public Astronaut Playlist',
+                'user_id' => 6,
+                'protected' => 0,
+            ],
+            [
+                'name' => 'Private Admin Playlist',
+                'user_id' => 1
+            ],
+            [
+                'name' => 'Public Admin Playlist',
+                'user_id' => 1,
+                'protected' => 0,
+            ],
+
+            [
+                'name' => 'Private Manager Playlist',
+                'user_id' => 5,
+            ],
+            [
+                'name' => 'Public Manager Playlist',
+                'user_id' => 5,
+                'protected' => 0,
             ],
         ];
 

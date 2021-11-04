@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\PlaylistController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Permission\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,21 +15,23 @@ use App\Http\Controllers\Permission\RoleController;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->name('welcome');
 
 Route::prefix('admin')->group(function () {
     Route::resource('users', App\Http\Controllers\Admin\UserController::class);
     Route::resource('genres', App\Http\Controllers\Admin\GenreController::class);
     Route::resource('tracks', App\Http\Controllers\Admin\TrackController::class);
     Route::resource('playlists', App\Http\Controllers\Admin\PlaylistController::class);
+    Route::resource('roles', App\Http\Controllers\Permission\RoleController::class);
+
 });
 
 //Route::patch('/admin/playlists/{playlist}/remove/{track}', PlaylistController::class)->name('playlists.remove');
 Route::get('admin/playlists/{playlist}/remove/{track}', [PlaylistController::class, 'remove'])
     ->name('playlists.remove');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

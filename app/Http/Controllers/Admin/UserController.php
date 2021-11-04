@@ -20,7 +20,7 @@ class UserController extends Controller
         );
         $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:user-edit', ['only' => 'edit', 'update']);
-        $this->middleware('permission:user-delete', ['only' => 'destroy', 'delete']);
+        $this->middleware('permission:user-delete|delete-astronaut', ['only' => 'destroy', 'delete']);
     }
     /**
      * Display a listing of the resource.
@@ -29,8 +29,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(5);
-        return view('admin.users.index', compact(['users']))
+        $authUser = auth()->user();
+        $authUserRole = $authUser->roles()->pluck('name')->first();
+        if($authUserRole == 'Admin'){
+            $users = User::paginate(5);
+        }
+        else if($authUserRole == 'Manager'){
+            $users = User::whereNotIn('name', ['Admin'])->paginate(5);
+        }
+        else{
+            $users[] = User::find($authUser->id)->paginate(1);
+        }
+
+        return view('admin.users.index', compact(['users', 'authUser', 'authUserRole']))
             ->with("i", (\request()->input('page', 1) - 1) * 10);
     }
 
@@ -94,9 +105,11 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $userRole = $user->roles->pluck('name', 'name')->first();
+        $authUser = auth()->user();
+        $authUserRole = auth()->user()->roles()->pluck('name')->first();
+        $userRole = $user->roles()->pluck('name')->first();
 
-        return view('admin.users.show', compact('user', 'userRole'));
+        return view('admin.users.show', compact('user', 'userRole','authUserRole', 'authUser'));
     }
 
     /**

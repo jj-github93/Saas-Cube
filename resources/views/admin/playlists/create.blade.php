@@ -32,7 +32,8 @@
                                 <option selected value="1">Private</option>
                                 <option value="0">Public</option>
                             </select>
-                        </div>'
+                        </div>
+                        '
                         {{-- Playlist User --}}
                         <div class="form-control">
                             <label for="user_id" class="label">
@@ -41,10 +42,16 @@
                             <select
                                 class="select select-bordered w-full max-w-xs"
                                 name="user_id" id="user_id">
-                                <option selected value="{{null}}">No User</option>
-                                @foreach($users as $user)
-                                    <option value="{{$user->id}}">{{$user->name}}</option>
-                                @endforeach
+                                @if(auth()->user()->roles()->pluck('name') == 'Admin')
+                                    <option selected value="{{null}}">No User</option>
+
+                                    @foreach($users as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                @else
+                                    <option selected value="{{$users->id}}">{{$users->name}}</option>
+                                @endif
+
                             </select>
                         </div>
 

@@ -49,8 +49,11 @@
                                 @csrf
                                 @method('delete')
                                 <a href="{{route('playlists.edit',['playlist'=>$playlist->id])}}"
-                                   class="btn btn-sm btn-primary text-gray-50">Update</a>
-                                <button class="btn btn-sm btn-secondary text-gray-50">
+                                   class="btn btn-sm btn-primary text-gray-50"
+                                    {{($playlist->user_id == $user->id || $user->can(['playlist-edit']) || $user->can('edit-public-playlist')) ? '' : "disabled"}}
+                                >Update</a>
+                                <button {{($playlist->user_id == $user->id || $user->can('playlist-delete') || $user->can('delete-public-playlist')) ? '' : "disabled"}}
+                                        class="btn btn-sm btn-secondary text-gray-50">
                                     Delete
                                 </button>
                                 <a href="{{url('/admin/playlists')}}" class="btn btn-sm btn-accent">

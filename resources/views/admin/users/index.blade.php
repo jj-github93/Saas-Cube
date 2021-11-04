@@ -30,6 +30,7 @@
                             </thead>
                             <tbody>
                             @foreach($users as $key=>$user)
+                                <?php $userRole = $user->roles()->pluck('name')->first() ?>
                                 <tr class="hover">
                                     <td class="small">{{$key+1}}</td>
                                     <td>{{$user->id}}</td>
@@ -37,14 +38,19 @@
                                     <td>
                                         <span
                                             class="bg-green-400 text-green-900 text-sm font-medium mr-2 px-3 py-1 rounded-md">
-                                            {{ $user->roles->pluck('name', 'name')->first()}}
+                                            {{ $userRole }}
                                         </span>
                                     </td>
                                     <td>
                                         <a href="{{url('/admin/users/' . $user->id)}}"
                                            class="btn btn-sm btn-primary text-gray-50">Details</a>
-                                        <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                                           class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        @if($authUserRole == 'Admin' || $user->id == $authUser->id || ($authUserRole == 'Manager' && $userRole == 'Astronaut') )
+                                            <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
+                                               class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        @else
+                                            <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
+                                               class="btn btn-sm btn-secondary text-gray-50" disabled >Update</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -24,26 +24,34 @@
                         <dd class="col-span-5 mb-2">{{$user->email}}</dd>
                         <dt class="col-span-1 mb-2">Playlists</dt>
                         @if($user->playlist->count() != 0)
-                            @foreach($user->playlist as $playlist)
-                                <dd class="col-span-5 mb-2">
-                                    <table class="table table-zebra">
-                                        <thead>
-                                        <tr>
-                                            <th>Playlist Name</th>
-                                            <th>Tracks</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
+
+                            <dt class="col-span-5 mb-2">
+                                <table class="table table-zebra">
+                                    <thead>
+                                    <tr>
+                                        <th>Playlist Name</th>
+                                        <th>Tracks</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($user->playlist as $playlist)
                                         <tr>
                                             <td>{{$playlist->name}}</td>
                                             <td>{{$playlist->tracks->count()}}</td>
-                                            <td><a href="{{route('playlists.show', ['playlist'=>$playlist])}}" class="btn-primary p-2 rounded-md">View</a></td>
+                                            <td>
+                                                @if($authUserRole == 'Admin' || $authUser->id == $user->id || $playlist->protected == 0)
+                                                    <a href="{{route('playlists.show', ['playlist'=>$playlist])}}"
+                                                       class="btn-primary p-2 rounded-md"
+                                                    >View</a>
+                                                @endif
+                                            </td>
                                         </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            @endforeach
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
+                            </dt>
                         @else
                             <dd class="col-span-5 mb-2">-</dd>
 
@@ -60,10 +68,16 @@
                                 @csrf
                                 @method('delete')
                                 <a href="{{route('users.edit',['user'=>$user->id])}}"
-                                   class="btn btn-sm btn-primary text-gray-50">Update</a>
-                                <button class="btn btn-sm btn-secondary text-gray-50">
-                                    Delete
-                                </button>
+                                   class="btn btn-sm btn-primary text-gray-50"
+                                    {{$user->id == $authUser->id || $authUserRole == 'Admin' || ($userRole == 'Astronaut' && $authUserRole == 'Manager') }}
+                                >Update</a>
+                                @if($authUserRole == 'Admin' || ($authUserRole == 'Manager' && $userRole == 'Astronaut'))
+                                    <button class="btn btn-sm btn-secondary text-gray-50"
+
+                                    >Delete
+                                    </button>
+                                @endif
+
                             </form>
 
                         </dd>
