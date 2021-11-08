@@ -111,7 +111,7 @@ class TrackController extends Controller
             'genre_id' => ['required', 'integer'],
             'track_number' => (isset($request->track_number) ? ['integer'] : [null]),
             'length' => ['string', 'max:255'],
-            'year' => (isset($request->password) && !is_null($request->password) ?
+            'year' => (isset($request->year) && !is_null($request->year) ?
                 ['string', 'max:4', 'numeric'] : [null])
         ]);
 

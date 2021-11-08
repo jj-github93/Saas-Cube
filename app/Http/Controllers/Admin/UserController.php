@@ -15,12 +15,12 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     function __construct(){
-        $this->middleware('permission:user-list|user-create|user-edit|user-delete|',
+        $this->middleware('permission:user-list|user-create|user-edit|user-delete|view-own-profile',
             ['only' => ['index', 'store']]
         );
         $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:user-edit', ['only' => 'edit', 'update']);
-        $this->middleware('permission:user-delete|delete-astronaut', ['only' => 'destroy', 'delete']);
+        $this->middleware('permission:user-edit|edit-own-profile', ['only' => 'edit', 'update']);
+        $this->middleware('permission:user-delete', ['only' => 'destroy', 'delete']);
     }
     /**
      * Display a listing of the resource.
@@ -38,7 +38,7 @@ class UserController extends Controller
             $users = User::whereNotIn('name', ['Admin'])->paginate(5);
         }
         else{
-            $users[] = User::find($authUser->id)->paginate(1);
+            $users = User::where('id', $authUser->id)->first();
         }
 
         return view('admin.users.index', compact(['users', 'authUser', 'authUserRole']))

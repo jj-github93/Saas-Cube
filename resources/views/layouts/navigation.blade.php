@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('welcome')" :active="request()->routeIs('welcome')">
                         {{ __('Home') }}
                     </x-nav-link>
-                    @can('user-list')
+                    @can(['view-own-profile' ?? 'user-list'])
                         <x-nav-link :href="route('users.index')" :active="request()->routeIs('users*')">
                             {{__('Users')}}
                         </x-nav-link>

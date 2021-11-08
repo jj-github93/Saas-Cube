@@ -31,11 +31,14 @@
                             <tbody>
                             @foreach($roles as $key=>$role)
                                 <tr class="hover">
+                                    <td></td>
                                     <td>{{$role->id}}</td>
                                     <td>{{$role->name}}</td>
                                     <td>
                                         <a href="{{url('/admin/roles/' . $role->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
-                                        <a href="{{url('/admin/roles/' . $role->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                        <a href="{{url('/admin/roles/' . $role->id . '/edit')}}"
+                                           {{$role->name == 'Admin' ? 'disabled': ""}}
+                                           class="btn btn-sm btn-secondary text-gray-50">Update</a>
                                     </td>
                                 </tr>
                             @endforeach

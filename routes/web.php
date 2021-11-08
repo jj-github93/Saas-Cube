@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PlaylistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,9 @@ Route::prefix('admin')->group(function () {
 //Route::patch('/admin/playlists/{playlist}/remove/{track}', PlaylistController::class)->name('playlists.remove');
 Route::get('admin/playlists/{playlist}/remove/{track}', [PlaylistController::class, 'remove'])
     ->name('playlists.remove');
+
+Route::get('admin/role/{role}/remove/{permission}', [\App\Http\Controllers\Permission\RoleController::class, 'remove_permission'])
+    ->name('roles.remove_permission');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

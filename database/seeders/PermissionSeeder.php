@@ -25,7 +25,7 @@ class PermissionSeeder extends Seeder
 
             // Astronaut Permissions
             'view-own-playlist',  'edit-own-playlist', 'delete-own-playlist',
-            'edit-own-profile',
+            'view-own-profile', 'edit-own-profile',
 
             // Manager Permissions
             'edit-public-playlist', 'delete-public-playlist', 'view-public-playlist',

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="fonts-semibold text-xl text-gray-800 leading-tight">
-            {{__('Playlist Details')}}
+            {{__('Role Details')}}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -10,51 +10,37 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <dl class="grid grid-cols-6 gaps-2">
                         <dt class="col-span-1 font-bold py-1">ID</dt>
-                        <dd class="col-span-5 py-1">{{$playlist->id}}</dd>
+                        <dd class="col-span-5 py-1">{{$role->id}}</dd>
                         <dt class="col-span-1 font-bold py-1">Name</dt>
-                        <dd class="col-span-5 py-1">{{$playlist->name}}</dd>
-                        <dt class="col-span-1 font-bold py-1">User</dt>
-                        <dd class="col-span-5 py-1">{{$playlist->user->name ?? "None"}}</dd>
-                        <dt class="col-span-1 font-bold py-1">Protection</dt>
-                        <dd class="col-span-5 py-1">{{($playlist->protected == true ? "Private" : "Public")}}</dd>
-                        <dt class="col-span-1  py-1 font-bold">Added</dt>
-                        <dd class="col-span-5 py-1">{{$playlist->created_at}}</dd>
-                        <dt class="col-span-1 py-1 font-bold">Tracks</dt>
-                        <dd class="col-span-5 py-1">{{$playlist->tracks()->count()}}</dd>
-                        <dd class="col-span-6 py-1">
-                            <table class="table w-full table-zebra">
-                                <thead>
-                                <tr>
-                                    <th>Track Name</th>
-                                    <th>Artist</th>
-                                    <th>Genre</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($playlist->tracks as $track)
-                                    <tr>
-                                        <td>{{$track->name}}</td>
-                                        <td>{{$track->artist}}</td>
-                                        <td>{{$track->genre->name}}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                        <dd class="col-span-5 py-1">{{$role->name}}</dd>
+                        <dt class="col-span-1 font-bold py-1">Permissions</dt>
+                        <dd class="col-span-5 py-1">
+                            @foreach($rolePermissions as $permission)
+                                <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md"
+                                >
+                                    {{$permission->name}}
+                                </span>
+
+                            @endforeach
                         </dd>
                         <dd class="col-span-5 pt-3">
                             <form
 
-                                action="{{route('playlists.destroy',['playlist'=>$playlist])}}"
+                                action="{{route('roles.destroy',['role'=>$role])}}"
                                 method="post">
                                 @csrf
                                 @method('delete')
-                                <a href="{{route('playlists.edit',['playlist'=>$playlist->id])}}"
-                                   class="btn btn-sm btn-primary text-gray-50">Update</a>
-                                <button class="btn btn-sm btn-secondary text-gray-50">
+                                <a href="{{route('roles.edit',['role'=>$role->id])}}"
+                                   class="btn btn-sm btn-primary text-gray-50"
+                                    {{$role->name == 'Admin' ? 'disabled': ""}}
+                                >Update</a>
+                                <button class="btn btn-sm btn-secondary text-gray-50"
+                                    {{$role->name == 'Admin' ? 'disabled': ""}}
+                                >
                                     Delete
                                 </button>
-                                <a href="{{url('/admin/playlists')}}" class="btn btn-sm btn-accent">
-                                    Back To Playlists
+                                <a href="{{url('/admin/roles')}}" class="btn btn-sm btn-accent">
+                                    Back To Roles
                                 </a>
 
                             </form>
@@ -66,5 +52,4 @@
         </div>
     </div>
 </x-app-layout>
-<!-- TODO: Update roles/show.blade file -->
 

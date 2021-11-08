@@ -36,13 +36,21 @@
                                     Role
                                 </span>
                             </label>
+                            @can('edit-own-profile' && !'user-create')
+                                <select name="roles" id="roles">
+                                    <option value="{{$user->roles()->pluck('id')->first()}}">{{$userRoles}}</option>
+                                </select>
+                            @endcan
+                            @can('user-create')
                             <select name="roles" id="roles">
                                 @foreach($roles as $role)
                                     @if($role != 'Admin')
-                                        <option {{$userRoles != 'Manager' || $userRoles != 'Admin' ? 'disabled' : ''}}value="{{$role}}">{{$role}}</option>
+                                        <option
+                                            {{$userRoles != 'Manager' || $userRoles != 'Admin' ? 'disabled' : ''}}value="{{$role}}">{{$role}}</option>
                                     @endif
                                 @endforeach
                             </select>
+                            @endcan
                         </div>
                         <div class="form-control">
                             <label for="email" class="label">

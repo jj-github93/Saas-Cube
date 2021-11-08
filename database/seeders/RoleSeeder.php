@@ -41,8 +41,8 @@ class RoleSeeder extends Seeder
     public function AstronautPermissions()
     {
         $astroPermissions = [
-            'edit-own-profile', 'playlist-create', 'view-own-playlist',
-            'view-public-playlist', 'delete-own-playlist',
+            'playlist-create', 'view-own-playlist', 'edit-own-playlist', 'view-public-playlist',
+            'delete-own-playlist', 'view-own-profile', 'edit-own-profile',
         ];
         $astronaut = Role::create(['name' => "Astronaut"]);
         $astronaut->syncPermissions($astroPermissions);

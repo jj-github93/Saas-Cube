@@ -12,7 +12,6 @@
                         <table class="table w-full table-zebra">
                             <thead>
                             <tr>
-                                <th></th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Role</th>
@@ -20,45 +19,68 @@
                                     <span class="pt-2">Action
 
                                     </span>
-                                    <a
-                                        href="{{route('users.create')}}"
-                                        class="btn btn-sm btn-tertiary tet-gray-50">
-                                        Add User
-                                    </a>
+                                    @can('user-create')
+                                        <a
+                                            href="{{route('users.create')}}"
+                                            class="btn btn-sm btn-tertiary tet-gray-50">
+                                            Add User
+                                        </a>
+                                    @endcan
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($users as $key=>$user)
-                                <?php $userRole = $user->roles()->pluck('name')->first() ?>
+                            @can('view-own-profile' && !'user-list')
                                 <tr class="hover">
-                                    <td class="small">{{$key+1}}</td>
-                                    <td>{{$user->id}}</td>
-                                    <td>{{$user->name}}</td>
+                                    <td>{{$users->id}}</td>
+                                    <td>{{$users->name}}</td>
                                     <td>
+                                        <span
+                                            class="bg-green-400 text-green-900 text-sm font-medium mr-2 px-3 py-1 rounded-md">
+                                            {{ $authUserRole }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{url('/admin/users/' . $users->id)}}"
+                                           class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                        <a href="{{url('/admin/users/' . $users->id . '/edit')}}"
+                                           class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                    </td>
+                                </tr>
+                            @endcan
+                            @can('user-list')
+                                @foreach($users as $user)
+                                    <?php $userRole = $user->roles()->pluck('name')->first() ?>
+                                    <tr class="hover">
+                                        <td>{{$user->id}}</td>
+                                        <td>{{$user->name}}</td>
+                                        <td>
                                         <span
                                             class="bg-green-400 text-green-900 text-sm font-medium mr-2 px-3 py-1 rounded-md">
                                             {{ $userRole }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <a href="{{url('/admin/users/' . $user->id)}}"
-                                           class="btn btn-sm btn-primary text-gray-50">Details</a>
-                                        @if($authUserRole == 'Admin' || $user->id == $authUser->id || ($authUserRole == 'Manager' && $userRole == 'Astronaut') )
-                                            <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                                               class="btn btn-sm btn-secondary text-gray-50">Update</a>
-                                        @else
-                                            <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                                               class="btn btn-sm btn-secondary text-gray-50" disabled >Update</a>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </td>
+                                        <td>
+                                            <a href="{{url('/admin/users/' . $user->id)}}"
+                                               class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                            @if($authUserRole == 'Admin' || $user->id == $authUser->id || ($authUserRole == 'Manager' && $userRole == 'Astronauta') )
+                                                <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
+                                                   class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                            @else
+                                                <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
+                                                   class="btn btn-sm btn-secondary text-gray-50" disabled>Update</a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+
                             </tbody>
                             <tfoot>
                             <tr>
                                 <td colspan="5">
+
                                     {{$users->onEachSide(1)->links()}}
+                                    @endcan
                                 </td>
                             </tr>
                             </tfoot>

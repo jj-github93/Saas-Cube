@@ -48,7 +48,7 @@
 
                                     </select>
                                 </div>
-                                '
+
                                 {{-- Playlist User --}}
                                 <div class="form-control">
                                     <label for="user_id" class="label">
@@ -70,7 +70,7 @@
                                 </div>
 
                                 {{--Remove Tracks--}}
-                                <div class="py-2 overflow-x-auto">
+                                <div class="py-2 overflow-x-auto overflow-auto">
                                     <h2 class="py-2">Tracks</h2>
                                     <table class="table w-full table-zebra">
                                         <thead>
@@ -108,7 +108,7 @@
                                 </div>
                                 {{--Add Tracks--}}
                                 <div class="form-control">
-                                    <div class="p-4 grid grid-cols-6 gaps-2">
+                                    <div class="p-4 grid grid-cols-6 gaps-2 overflow-auto">
                                         <div class="col-span-6">
                                             <h2 class="py-2">Add Tracks:</h2>
                                             <table class="w-full table table-compact">

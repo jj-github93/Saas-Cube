@@ -10,7 +10,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form action="{{route('roles.store')}}" method="post">
                         @csrf
-                    {{--   Role Name  --}}
+                        {{--   Role Name  --}}
                         <div class="form-control">
                             <label for="name" class="label">
                                 <span class="label-text">Name</span>
@@ -38,25 +38,18 @@
                                 </thead>
                                 <tbody>
                                 @foreach($all_permissions as $permission)
-                                    @if(!$playlist->tracks->contains('id', $track->id))
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox"
-                                                       name="permissions[]"
-                                                       value="{{$permission->id}}">
-                                            </td>
-                                            <td>{{$permission->id}}</td>
-                                            <td>{{$permission->name}}</td>
-                                        </tr>
-                                    @endif
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox"
+                                                   name="permissions[]"
+                                                   value="{{$permission->id}}">
+                                        </td>
+                                        <td>{{$permission->id}}</td>
+                                        <td>{{$permission->name}}</td>
+                                    </tr>
                                 @endforeach
                                 </tbody>
                             </table>
-                            <select name="permissions[]" id="permissions[]">
-                                <option disabled value="0"></option>
-                                @foreach($permissions as $permission)
-                                    <option value="{{$permission->id}}">{{$permission->name}} </option>
-                            </select>
                         </div>
 
                         <div class="py-6">
