@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             GenreSeeder::class,
             TracksSeeder::class,
             PlaylistSeeder::class,
+            PlaylistTrackSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
             AdminUserSeeder::class,
