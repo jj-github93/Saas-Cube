@@ -143,7 +143,7 @@ class UserController extends Controller
                 'string', 'confirmed',
                 Password::min(4)
                     ->letters()
-//                    ->numbers()
+                    ->numbers()
 //                    ->symbols()
 //                    ->mixedCase()
             ] : [null]),

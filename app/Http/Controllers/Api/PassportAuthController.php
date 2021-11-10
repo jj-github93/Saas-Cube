@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 
@@ -21,8 +22,33 @@ class PassportAuthController extends Controller
                 //->mixedCase()
             ],
             'password_confirmation' => ['required_with:password', 'string'],
-
         ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $token = $user->createToken('jukebox-auth')->accessToken;
+
+        return response()->json(['token'=>$token], 200);
+
+
+    }
+
+    public function login(Request $request)
+    {
+        $data = [
+            'email'=>$request->email,
+            'password'=>$request->password,
+        ];
+        if(auth()->attempt($data)){
+            $token = auth()->user()->createToken('jukebox-auth')->accessToken;
+            return response()->json(['token' => $token],200);
+        }
+        else{
+            return response()->json(['error' => 'Unauthorised login'], 401);
+        }
     }
 }
 //    /**

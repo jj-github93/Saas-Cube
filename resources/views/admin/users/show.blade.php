@@ -69,10 +69,13 @@
                                 @method('delete')
                                 <a href="{{route('users.edit',['user'=>$user->id])}}"
                                    class="btn btn-sm btn-primary text-gray-50"
+                                    {{$userRole == 'Admin' ? 'disabled' : ""}}
+
                                     {{$user->id == $authUser->id || $authUserRole == 'Admin' || ($userRole == 'Astronaut' && $authUserRole == 'Manager') }}
                                 >Update</a>
                                 @if($authUserRole == 'Admin' || ($authUserRole == 'Manager' && $userRole == 'Astronaut'))
                                     <button class="btn btn-sm btn-secondary text-gray-50"
+                                            {{$userRole == 'Admin' ? 'disabled' : ""}}
 
                                     >Delete
                                     </button>

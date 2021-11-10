@@ -27,7 +27,6 @@ Route::prefix('admin')->group(function () {
 
 });
 
-//Route::patch('/admin/playlists/{playlist}/remove/{track}', PlaylistController::class)->name('playlists.remove');
 Route::get('admin/playlists/{playlist}/remove/{track}', [PlaylistController::class, 'remove'])
     ->name('playlists.remove');
 

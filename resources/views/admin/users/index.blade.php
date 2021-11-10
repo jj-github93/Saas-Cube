@@ -62,10 +62,13 @@
                                         </td>
                                         <td>
                                             <a href="{{url('/admin/users/' . $user->id)}}"
-                                               class="btn btn-sm btn-primary text-gray-50">Details</a>
+                                               class="btn btn-sm btn-primary text-gray-50"
+                                            >Details</a>
                                             @if($authUserRole == 'Admin' || $user->id == $authUser->id || ($authUserRole == 'Manager' && $userRole == 'Astronauta') )
                                                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
-                                                   class="btn btn-sm btn-secondary text-gray-50">Update</a>
+                                                   class="btn btn-sm btn-secondary text-gray-50"
+                                                    {{$userRole == 'Admin' ? 'disabled' : ""}}
+                                                >Update</a>
                                             @else
                                                 <a href="{{url('/admin/users/' . $user->id . '/edit')}}"
                                                    class="btn btn-sm btn-secondary text-gray-50" disabled>Update</a>
