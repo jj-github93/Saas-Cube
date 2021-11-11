@@ -5,99 +5,184 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ApiPlaylistController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $playlists = Playlist::all();
-
-        return response()->json([
-            'success' => true,
-            'data' => $playlists->toArray(),
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function find($id)
     {
         $playlist = Playlist::find($id);
-
         if (!$playlist) {
             return response()->json([
                 'success' => false,
-                'message' => 'Playlist not found'
+                'message' => 'Playlist was not found',
             ], 400);
         }
         return response()->json([
             'success' => true,
-            'data' => $playlist->toArrray(),
+            'data' => $playlist->toArray(),
+        ], 200);
+    }
+
+    public function all()
+    {
+        $playlists = Playlist::all();
+
+        if (!is_null($playlists)) {
+            return response()->json([
+                'success' => true,
+                'data' => $playlists->toArray(),
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Unable to find playlists',
+        ], 400);
+    }
+
+    public function store(Request $request)
+    {
+
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'protected' => 'required|bool',
+            'user_id' => ['nullable', 'exists:users,id']
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validation->errors()->toArray(),
+            ], 400);
+        }
+
+
+        $playlist = Playlist::create([
+            'name' => $request->input('name'),
+            'protected' => $request->input('protected'),
+            'user_id' => $request->input('user_id'),
+        ]);
+
+
+        if ($playlist) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Playlist has been saved',
+                'data' => $playlist->toArray(),
+            ], 200);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => "Error occurred creating playlist"
+        ], 400);
+
+    }
+
+    public function edit(Request $request, Playlist $playlist)
+    {
+
+        $validation = Validator::make($request->all(), [
+            'name' => 'string|max:255',
+            'protected' => 'bool',
+            'user_id' => 'exists:users,id',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validation->errors()->toArray(),
+            ], 400);
+        }
+
+        if (!is_null($request->input('name'))) {
+            $playlist->name = $request->input('name');
+        }
+        if (!is_null($request->input('protected'))) {
+            $playlist->protected = $request->input('protected');
+        }
+        if (!is_null($request->input('user_id'))) {
+            $playlist->user_id = $request->input('user_id');
+        }
+
+        $playlist->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Playlist was successfully updated',
+            'data' => $playlist->toArray(),
         ]);
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update_all(Request $request, Playlist $playlist)
     {
-        //
+
+        if ($request['user_id'] == 'null') {
+            $request['user_id'] = null;
+        }
+
+
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'protected' => 'required|bool',
+            'user_id' => 'nullable|exists:users,id',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validation->errors()->toArray(),
+            ], 400);
+        }
+
+        $playlist->name = $request['name'];
+        $playlist->protected = (bool)$request['protected'];
+        $playlist->user_id = $request['user_id'];
+
+        $playlist->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Playlist has been successfully updated',
+            'data' => $playlist->toArray(),
+        ], 200);
+
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function delete($id)
     {
-        //
+        $playlist = Playlist::find($id);
+
+        if(is_null($playlist)){
+            return response()->json([
+                'success' => false,
+                'message' => 'Requested playlist was not found in the collection',
+            ]);
+        }
+
+        $playlist->tracks()->detach();
+
+        $success = $playlist->delete();
+
+        if(!$success){
+            return response()->json([
+                'success' => false,
+                'message' => 'Error occurred whilst deleting playlist',
+            ]);
+        }
+
+        return response()->json([
+            'success' => $success,
+            'message' => 'Playlist was successfully deleted'
+        ]);
+
+
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function rules($name, $protected, $user_id)
     {
-        //
+
     }
 }
