@@ -71,7 +71,7 @@
                                     </label>
                                     <select name="genre_id" id="genre_id"
                                             class="select select-bordered w-full max-w-xs">
-                                        <option value="0">No Genre</option>
+                                        <option value="{{null}}">No Genre</option>
                                         @foreach($genres as $key=>$genre)
                                             <option value="{{$genre->id}}">{{$genre->name}}</option>
                                         @endforeach

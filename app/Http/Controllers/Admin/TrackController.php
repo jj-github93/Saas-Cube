@@ -52,18 +52,17 @@ class TrackController extends Controller
             'name' => ['required', 'string', 'max:255',],
             'artist' => ['required', 'string', 'max:64',],
             'album' => ['string', 'max:64'],
-            'genre_id' => ['required', 'integer'],
+            'genre_id' => ['nullable', 'exists:genres,id'],
             'track_number' => (isset($request->track_number) ? ['integer'] : [null]),
             'length' => ['string', 'max:255'],
-            'year' => (isset($request->password) && !is_null($request->password) ?
-                ['string', 'max:4', 'numeric'] : [null])
+            'year' => ['nullable', 'numeric', 'max:2021'],
         ]);
 
         Tracks::create([
             'name' => $request->input('name'),
             'artist' => $request->input('artist'),
             'album' => $request->input('album'),
-            'genre_id' => $request->input('genre_id') == 0 ? null : $request->input('genre_id'),
+            'genre_id' => $request->input('genre_id'),
             'track_number' => $request->input('track_number') ?? 1,
             'length' => $request->input('length'),
             'year' => $request->input('year'),
@@ -108,11 +107,10 @@ class TrackController extends Controller
             'name' => ['required', 'string', 'max:255',],
             'artist' => ['required', 'string', 'max:64',],
             'album' => ['string', 'max:64'],
-            'genre_id' => ['required', 'integer'],
-            'track_number' => (isset($request->track_number) ? ['integer'] : [null]),
+            'genre_id' => 'nullable|exists:genres,id',
+            'track_number' => 'nullable|integer',
             'length' => ['string', 'max:255'],
-            'year' => (isset($request->year) && !is_null($request->year) ?
-                ['string', 'max:4', 'numeric'] : [null])
+            'year' => ['nullable', 'numeric', 'max:2021'],
         ]);
 
         if (isset($request['track_number']) && ($request->input != $track->track_number)) {
@@ -128,7 +126,7 @@ class TrackController extends Controller
             $track->album = $request->input('album');
         }
         if (isset($request['genre_id']) && ($request->input != $track->genre_id)) {
-            $track->genre_id = $request->input('genre_id') != 0 ? $request->input('genre_id') : null;
+            $track->genre_id = $request->input('genre_id');
         }
         if (isset($request['year']) && ($request->input != $track->year)) {
             $track->year = $request->input('year');

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiPlaylistController extends Controller
 {
-    public function find($id)
+    public function read($id)
     {
         $playlist = Playlist::find($id);
         if (!$playlist) {
@@ -24,7 +24,7 @@ class ApiPlaylistController extends Controller
         ], 200);
     }
 
-    public function all()
+    public function browse()
     {
         $playlists = Playlist::all();
 
@@ -40,14 +40,10 @@ class ApiPlaylistController extends Controller
         ], 400);
     }
 
-    public function store(Request $request)
+    public function add(Request $request)
     {
 
-        $validation = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'protected' => 'required|bool',
-            'user_id' => ['nullable', 'exists:users,id']
-        ]);
+        $validation = $this->validate_request($request);
 
         if ($validation->fails()) {
             return response()->json([
@@ -94,14 +90,10 @@ class ApiPlaylistController extends Controller
             ], 400);
         }
 
-        if (!is_null($request->input('name'))) {
-            $playlist->name = $request->input('name');
-        }
-        if (!is_null($request->input('protected'))) {
-            $playlist->protected = $request->input('protected');
-        }
-        if (!is_null($request->input('user_id'))) {
-            $playlist->user_id = $request->input('user_id');
+        foreach ($request->keys() as $key) {
+            if (!is_null($request[$key])) {
+                $playlist[$key] = $request[$key];
+            }
         }
 
         $playlist->save();
@@ -122,11 +114,8 @@ class ApiPlaylistController extends Controller
         }
 
 
-        $validation = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'protected' => 'required|bool',
-            'user_id' => 'nullable|exists:users,id',
-        ]);
+        $validation = $this->validate_request($request);
+
 
         if ($validation->fails()) {
             return response()->json([
@@ -154,7 +143,7 @@ class ApiPlaylistController extends Controller
     {
         $playlist = Playlist::find($id);
 
-        if(is_null($playlist)){
+        if (is_null($playlist)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Requested playlist was not found in the collection',
@@ -165,7 +154,7 @@ class ApiPlaylistController extends Controller
 
         $success = $playlist->delete();
 
-        if(!$success){
+        if (!$success) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error occurred whilst deleting playlist',
@@ -178,11 +167,17 @@ class ApiPlaylistController extends Controller
         ]);
 
 
-
     }
 
-    public function rules($name, $protected, $user_id)
+    public function validate_request(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'protected' => 'required|bool',
+            'user_id' => 'nullable|exists:users,id',
+        ]);
+
+        return $validation;
 
     }
 }

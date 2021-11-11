@@ -20,7 +20,7 @@
                         <dt class="col-span-1">Album</dt>
                         <dd class="col-span-5">{{$track->album}}</dd>
                         <dt class="col-span-1">Genre</dt>
-                        <dd class="col-span-5">{{$track->genre->name}}</dd>
+                        <dd class="col-span-5">{{$track->genre->name ?? '-'}}</dd>
                         <dt class="col-span-1">Duration</dt>
                         <dd class="col-span-5">{{$track->length}}</dd>
                         <dt class="col-span-1">Release Year</dt>

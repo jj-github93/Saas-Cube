@@ -76,7 +76,7 @@
                                     <select name="genre_id" id="genre_id"
                                             class="select select-bordered w-full max-w-xs">
 
-                                        <option value="0">No Genre Selected</option>
+                                        <option value="{{null}}">No Genre Selected</option>
                                         @foreach($all_genres as $key=>$value)
                                             @if($value->id == $track->genre_id)
                                                 <option selected value="{{$value->id}}">{{$value->name}}</option>

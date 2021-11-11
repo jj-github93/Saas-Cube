@@ -37,7 +37,7 @@
                                     <td>{{$track->name}}</td>
                                     <td>{{$track->artist}}</td>
                                     <td> {{$track->album}} </td>
-                                    <td>{{$track->genre->name}}</td>
+                                    <td>{{$track->genre->name ?? '-'}}</td>
                                     <td>
                                         <a href="{{url('/admin/tracks/' . $track->id)}}" class="btn btn-sm btn-primary text-gray-50">Details</a>
                                         <a href="{{url('/admin/tracks/' . $track->id . '/edit')}}" class="btn btn-sm btn-secondary text-gray-50">Update</a>

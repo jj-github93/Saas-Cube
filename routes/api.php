@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiPlaylistController;
+use App\Http\Controllers\Api\ApiTrackController;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,14 +25,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //  Playlist API Calls
-Route::get('playlists/find/{id}', [ApiPlaylistController::class, 'find']);
-Route::get('playlists/all', [ApiPlaylistController::class, 'all']);
-Route::post('playlists/store', [ApiPlaylistController::class, 'store']);
+Route::get('playlists/browse', [ApiPlaylistController::class, 'browse']);
+Route::get('playlists/read/{id}', [ApiPlaylistController::class, 'read']);
 Route::patch('playlists/edit/{playlist}', [ApiPlaylistController::class, 'edit']);
-Route::put('playlists/update_all/{playlist}', [ApiPlaylistController::class, 'update_all']);
+Route::post('playlists/add', [ApiPlaylistController::class, 'add']);
 Route::delete('playlists/delete/{playlist}', [ApiPlaylistController::class, 'delete']);
+Route::put('playlists/update_all/{playlist}', [ApiPlaylistController::class, 'update_all']);
 
-
-
+// Track Api Calls
+Route::get('tracks/browse', [ApiTrackController::class, 'browse']);
+Route::get('tracks/read/{id}', [ApiTrackController::class, 'read']);
+Route::patch('tracks/edit/{track}', [ApiTrackController::class, 'edit']);
+Route::post('tracks/add', [ApiTrackController::class, 'add']);
+Route::delete('tracks/delete/{id}', [ApiTrackController::class, 'delete']);
+Route::put('tracks/update_all/{track}', [ApiTrackController::class, 'update_all']);
 
 
