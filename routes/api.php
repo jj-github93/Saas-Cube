@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\ApiGenreController;
 use App\Http\Controllers\Api\ApiPlaylistController;
 use App\Http\Controllers\Api\ApiTrackController;
+use App\Http\Controllers\Api\ApiUserController;
 use App\Models\Playlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,4 +42,19 @@ Route::post('tracks/add', [ApiTrackController::class, 'add']);
 Route::delete('tracks/delete/{id}', [ApiTrackController::class, 'delete']);
 Route::put('tracks/update_all/{track}', [ApiTrackController::class, 'update_all']);
 
+// Genre Api Calls
+Route::get('genres/browse', [ApiGenreController::class, 'browse']);
+Route::get('genres/read/{id}', [ApiGenreController::class, 'read']);
+Route::patch('genres/edit/{genre}', [ApiGenreController::class, 'edit']);
+Route::post('genres/add', [ApiGenreController::class, 'add']);
+Route::delete('genres/delete/{id}', [ApiGenreController::class, 'delete']);
+Route::put('genres/update_all/{genre}', [ApiGenreController::class, 'update_all']);
+
+// User Api Calls
+Route::get('users/browse', [ApiUserController::class, 'browse']);
+Route::get('users/read/{id}', [ApiUserController::class, 'read']);
+Route::patch('users/edit/{user}', [ApiUserController::class, 'edit']);
+Route::post('users/add', [ApiUserController::class, 'add']);
+Route::delete('users/delete/{id}', [ApiUserController::class, 'delete']);
+Route::put('users/update_all/{user}', [ApiUserController::class, 'update_all']);
 
