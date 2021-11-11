@@ -17,7 +17,7 @@ class CreateGenresTable extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('parent_id')->nullable();
-            $table->string('icon')->default("000-unknown.png");
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

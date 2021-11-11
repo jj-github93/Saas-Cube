@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Playlist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -14,7 +15,8 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    function __construct(){
+    function __construct()
+    {
         $this->middleware('permission:user-list|user-create|user-edit|user-delete|view-own-profile',
             ['only' => ['index', 'store']]
         );
@@ -22,6 +24,7 @@ class UserController extends Controller
         $this->middleware('permission:user-edit|edit-own-profile', ['only' => 'edit', 'update']);
         $this->middleware('permission:user-delete', ['only' => 'destroy', 'delete']);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,13 +34,11 @@ class UserController extends Controller
     {
         $authUser = auth()->user();
         $authUserRole = $authUser->roles()->pluck('name')->first();
-        if($authUserRole == 'Admin'){
+        if ($authUserRole == 'Admin') {
             $users = User::paginate(5);
-        }
-        else if($authUserRole == 'Manager'){
+        } else if ($authUserRole == 'Manager') {
             $users = User::whereNotIn('name', ['Admin'])->paginate(5);
-        }
-        else{
+        } else {
             $users = User::where('id', $authUser->id)->first();
         }
 
@@ -65,9 +66,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //ddd($request);
-
-        $request->validate([
+        $validated_data = $request->validate([
             'name' => ['required', 'string', 'max:255',],
             'email' => ['required', 'email', 'email:rfc', 'string', 'unique:users'],
             'password' => ['required', 'confirmed', 'string',
@@ -81,18 +80,10 @@ class UserController extends Controller
             'roles' => ['required'],
         ]);
 
-        $inputs = $request->all();
-        $inputs['password'] = Hash::make($inputs['password']);
+        $validated_data['password'] = Hash::make($validated_data['password']);
 
-        $user = User::create($inputs);
+        $user = User::create($validated_data);
         $user->assignRole($request->input('roles'));
-
-//        User::create([
-//            'name' => $request->input('name'),
-//            'email' => $request->input('email'),
-//            'password' => Hash::make($request->input('password'))
-//        ]);
-
 
         return redirect(route('users.index'))->with('success', 'User created successfully');
     }
@@ -109,7 +100,7 @@ class UserController extends Controller
         $authUserRole = auth()->user()->roles()->pluck('name')->first();
         $userRole = $user->roles()->pluck('name')->first();
 
-        return view('admin.users.show', compact('user', 'userRole','authUserRole', 'authUser'));
+        return view('admin.users.show', compact('user', 'userRole', 'authUserRole', 'authUser'));
     }
 
     /**
@@ -151,10 +142,9 @@ class UserController extends Controller
 
         $inputs = $request->all();
 
-        if(!empty($inputs['password'])){
+        if (!empty($inputs['password'])) {
             $inputs['password'] = Hash::make($inputs['password']);
-        }
-        else{
+        } else {
             $inputs = Arr::except($inputs, array('password'));
         }
         $user->update($inputs);
@@ -164,20 +154,8 @@ class UserController extends Controller
             ->delete();
         $user->assignRole($request->input(['roles']));
 
-//        if (!is_null($request->input('password')) && ($request->input('password') != $user->password)) {
-//            $user->password = Hash::make($request->input('password'));
-//        }
-//        if (isset($request['name']) && ($request->input('name') != $user->name)) {
-//            $user->name = $request->input('name');
-//        }
-//        if (isset($request['email']) && ($request->input('email') != $user->email)) {
-//            $user->email = $request->input('email');
-//        }
-//          $user->save();
         return redirect(route('users.index'))
             ->with('success', 'User updated successfully');
-
-
     }
 
     /**
@@ -188,10 +166,19 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+
+        $playlists = Playlist::where('user_id', $user->id)
+            ->get();
+
+        if(!is_null($playlists)){
+            foreach($playlists as $playlist){
+                $playlist->delete();
+            }
+        }
+
         $user->delete();
         return redirect(route('users.index'))
             ->with('success', 'User has been deleted');
     }
-
 
 }

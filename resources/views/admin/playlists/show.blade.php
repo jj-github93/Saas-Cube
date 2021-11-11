@@ -35,7 +35,7 @@
                                     <tr>
                                         <td>{{$track->name}}</td>
                                         <td>{{$track->artist}}</td>
-                                        <td>{{$track->genre->name}}</td>
+                                        <td>{{$track->genre->name ?? '-'}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

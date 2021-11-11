@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Playlist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -151,6 +152,14 @@ class ApiUserController extends Controller
                 'success' => false,
                 'message' => 'Requested user was not found in the collection',
             ]);
+        }
+
+        $playlists = Playlist::where('user_id', $id)->get();
+
+        if(!is_null($playlists)){
+            foreach($playlists as $playlist){
+                $playlist->delete();
+            }
         }
 
         if ($user->delete()) {

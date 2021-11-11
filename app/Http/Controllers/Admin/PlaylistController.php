@@ -72,18 +72,9 @@ class PlaylistController extends Controller
      */
     public function store(Request $request)
     {
+        $validated_data = $this->validate_data($request);
 
-        $request->validate([
-            'name' => ['required', 'string', 'max:64',],
-            'protected' => ['required', 'bool'],
-            'user_id' => ['nullable', 'integer']
-        ]);
-
-        Playlist::create([
-            'name' => $request->input('name'),
-            'protected' => $request->input('protected'),
-            'user_id' => $request->input('user_id'),
-        ]);
+        Playlist::create($validated_data);
 
         return redirect(route('playlists.index'));
     }
@@ -130,26 +121,10 @@ class PlaylistController extends Controller
      */
     public function update(Request $request, Playlist $playlist)
     {
-        //ddd($request);
-
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'protected' => ['required', 'bool'],
-            'user_id' => ['nullable', 'numeric']
-        ]);
-
-        if (isset($request['name']) && $request->input('name') != $playlist->name) {
-            $playlist->name = $request->input('name');
-        }
-        if ($request->input('user_id') != $playlist->user_id) {
-            $playlist->user_id = $request->input('user_id');
-        }
-        if ($request->input('protected') != $playlist->protected) {
-            $playlist->protected = $request->input('protected');
-        }
+        $validated_data = $this->validate_data($request);
+        $playlist->update($validated_data);
 
         $playlist->tracks()->attach($request->add_tracks);
-
         $playlist->save();
 
         $all_tracks = Tracks::all();
@@ -178,5 +153,21 @@ class PlaylistController extends Controller
         $playlist->tracks()->detach($track);
         $all_tracks = Tracks::all();
         return view('admin.playlists.update', compact(['playlist', 'all_tracks']));
+    }
+
+    public function validate_data(Request $request)
+    {
+        if($request['protected'] == 1){
+            $request['protected'] = true;
+        }
+        else{
+            $request['protected'] = false;
+        }
+
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'protected' => 'required|bool',
+            'user_id' => ['nullable', 'numeric']
+        ]);
     }
 }

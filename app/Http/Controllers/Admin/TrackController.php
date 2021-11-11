@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Genre;
+use App\Models\Playlist;
 use App\Models\Tracks;
 use Illuminate\Http\Request;
 
 class TrackController extends Controller
 {
-    function __construct(){
+    function __construct()
+    {
         $this->middleware('permission:track-list|track-create|track-edit|track-delete|',
             ['only' => ['index', 'store']]
         );
@@ -17,6 +19,7 @@ class TrackController extends Controller
         $this->middleware('permission:track-edit', ['only' => 'edit', 'update']);
         $this->middleware('permission:track-delete', ['only' => 'destroy', 'delete']);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,25 +51,8 @@ class TrackController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255',],
-            'artist' => ['required', 'string', 'max:64',],
-            'album' => ['string', 'max:64'],
-            'genre_id' => ['nullable', 'exists:genres,id'],
-            'track_number' => (isset($request->track_number) ? ['integer'] : [null]),
-            'length' => ['string', 'max:255'],
-            'year' => ['nullable', 'numeric', 'max:2021'],
-        ]);
-
-        Tracks::create([
-            'name' => $request->input('name'),
-            'artist' => $request->input('artist'),
-            'album' => $request->input('album'),
-            'genre_id' => $request->input('genre_id'),
-            'track_number' => $request->input('track_number') ?? 1,
-            'length' => $request->input('length'),
-            'year' => $request->input('year'),
-        ]);
+        $data = $this->validate_data($request);
+        Tracks::create($data);
 
         return redirect(route("tracks.index"));
     }
@@ -103,38 +89,8 @@ class TrackController extends Controller
      */
     public function update(Request $request, Tracks $track)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255',],
-            'artist' => ['required', 'string', 'max:64',],
-            'album' => ['string', 'max:64'],
-            'genre_id' => 'nullable|exists:genres,id',
-            'track_number' => 'nullable|integer',
-            'length' => ['string', 'max:255'],
-            'year' => ['nullable', 'numeric', 'max:2021'],
-        ]);
-
-        if (isset($request['track_number']) && ($request->input != $track->track_number)) {
-            $track->track_number = $request->input('track_number');
-        }
-        if (isset($request['name']) && ($request->input != $track->name)) {
-            $track->name = $request->input('name');
-        }
-        if (isset($request['artist']) && ($request->input != $track->artist)) {
-            $track->artist = $request->input('artist');
-        }
-        if (isset($request['album']) && ($request->input != $track->album)) {
-            $track->album = $request->input('album');
-        }
-        if (isset($request['genre_id']) && ($request->input != $track->genre_id)) {
-            $track->genre_id = $request->input('genre_id');
-        }
-        if (isset($request['year']) && ($request->input != $track->year)) {
-            $track->year = $request->input('year');
-        }
-        if (isset($request['length']) && ($request->input != $track->length)) {
-            $track->length = $request->input('length');
-        }
-
+        $data = $this->validate_data($request);
+        $track->update($data);
         $track->save();
 
         return redirect(route("tracks.index"));
@@ -148,7 +104,34 @@ class TrackController extends Controller
      */
     public function destroy(Tracks $track)
     {
+        $playlists = Playlist::whereHas('tracks', function ($query) {
+            $query->where('playlist_track.track_id', 50);
+        })->get();
+
+        if (!is_null($playlists)) {
+            foreach ($playlists as $playlist) {
+                $playlist->tracks()->detach($track);
+            }
+        }
+
         $track->delete();
         return redirect(route('tracks.index'));
+    }
+
+    public function validate_data(Request $request)
+    {
+        if(is_null($request['album'])){
+            $request['album'] = 'No album';
+        }
+
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255',],
+            'artist' => ['required', 'string', 'max:64',],
+            'album' => ['string', 'max:64'],
+            'genre_id' => 'nullable|exists:genres,id',
+            'track_number' => 'nullable|integer',
+            'length' => 'nullable|string|max:10',
+            'year' => ['nullable', 'numeric', 'max:2021'],
+        ]);
     }
 }

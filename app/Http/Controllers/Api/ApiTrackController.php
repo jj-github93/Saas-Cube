@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Playlist;
 use App\Models\Tracks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -157,26 +158,34 @@ class ApiTrackController extends Controller
             ]);
         }
 
-        $success = $track->delete();
+        $playlists = Playlist::whereHas('tracks', function ($query) {
+            $query->where('playlist_track.track_id', 50);
+        })->get();
 
-        if (!$success) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error occurred whilst deleting track',
-            ]);
+        if (!is_null($playlists)) {
+            foreach ($playlists as $playlist) {
+                $playlist->tracks()->detach($id);
+            }
         }
 
+        if ($track->delete()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'track was successfully deleted'
+            ]);
+        }
         return response()->json([
-            'success' => $success,
-            'message' => 'track was successfully deleted'
+            'success' => false,
+            'message' => 'Error occurred whilst deleting track',
         ]);
+
 
     }
 
     public function validate_request(Request $request)
     {
-        foreach($request->keys() as $key){
-            if($request[$key] == 'null'){
+        foreach ($request->keys() as $key) {
+            if ($request[$key] == 'null') {
                 $request[$key] = null;
             }
         }

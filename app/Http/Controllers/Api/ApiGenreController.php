@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Genre;
+use App\Models\Tracks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -147,6 +148,18 @@ class ApiGenreController extends Controller
             ]);
         }
 
+        $tracks = Tracks::where('genre_id', $genre->id)->get();
+        $_genres = Genre::where('parent_id', $genre->id)->get();
+
+        foreach($tracks as $track){
+            $track->genre_id = null;
+            $track->save();
+        }
+        foreach($_genres as $_genre){
+            $_genre->parent_id = null;
+            $_genre->save();
+        }
+
         if ($genre->delete()) {
             return response()->json([
                 'success' => true,
@@ -176,6 +189,5 @@ class ApiGenreController extends Controller
         ]);
 
         return $validation;
-
     }
 }
